@@ -9,6 +9,8 @@
     var pageSize = (int)(ViewBag.PageSize ?? Model.Count());
     var startItem = totalItems == 0 ? 0 : ((page - 1) * pageSize) + 1;
     var endItem = Math.Min(page * pageSize, totalItems);
+    var esPublico = (bool)(ViewBag.EsPublico ?? false);
+    var usuarioLogueado = Context.Session.GetString("UsuarioId") != null;
 }
 
 <div class="container-fluid">
@@ -96,7 +98,7 @@
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">🔍 Filtros de búsqueda</h5>
-            <form method="get" asp-action="Index">
+            <form method="get" asp-action="@(esPublico ? "IndexPublico" : "Index")">
                 <input type="hidden" name="page" value="1" />
                 <div class="row g-3">
                     <div class="col-md-3">
@@ -194,7 +196,14 @@
                         
                         <h4 class="text-primary mb-3">@item.Precio.ToString("C")</h4>
                         
-                        <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-primary w-100">Ver detalles</a>
+                        @if (usuarioLogueado)
+                        {
+                            <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-primary w-100">Ver detalles</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100">🔑 Inicia sesión para ver detalles</a>
+                        }
                     </div>
                 </div>
             </div>
@@ -214,7 +223,7 @@
             <ul class="pagination mb-0">
                 <li class="page-item @(page <= 1 ? "disabled" : string.Empty)">
                     <a class="page-link"
-                       asp-action="Index"
+                       asp-action="@(esPublico ? "IndexPublico" : "Index")"
                        asp-route-page="@(page - 1)"
                        asp-route-nombre="@ViewBag.Nombre"
                        asp-route-precioMin="@ViewBag.PrecioMin"
@@ -227,7 +236,7 @@
                 {
                     <li class="page-item @(i == page ? "active" : string.Empty)">
                         <a class="page-link"
-                           asp-action="Index"
+                           asp-action="@(esPublico ? "IndexPublico" : "Index")"
                            asp-route-page="@i"
                            asp-route-nombre="@ViewBag.Nombre"
                            asp-route-precioMin="@ViewBag.PrecioMin"
@@ -239,7 +248,7 @@
 
                 <li class="page-item @(page >= totalPages ? "disabled" : string.Empty)">
                     <a class="page-link"
-                       asp-action="Index"
+                       asp-action="@(esPublico ? "IndexPublico" : "Index")"
                        asp-route-page="@(page + 1)"
                        asp-route-nombre="@ViewBag.Nombre"
                        asp-route-precioMin="@ViewBag.PrecioMin"
