@@ -1,0 +1,225 @@
+@model List<ApplicationCore.Domain.EN.Producto>
+
+@{
+    ViewData["Title"] = "Mis Favoritos";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>❤️ Mis Favoritos</h1>
+            <p class="text-muted">Productos que te han gustado</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="text-center py-5">
+            <div class="mb-4" style="font-size: 5rem;">💔</div>
+            <h3>No tienes productos en favoritos</h3>
+            <p class="text-muted mb-4">Explora nuestra tienda y añade productos que te gusten</p>
+            <a asp-controller="Tienda" asp-action="Index" class="btn btn-primary">
+                🛍️ Ver catálogo
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row mb-3">
+            <div class="col">
+                <p class="text-muted">
+                    <strong>@Model.Count</strong> producto@(Model.Count != 1 ? "s" : "") en favoritos
+                </p>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (var producto in Model)
+            {
+                <div class="col" id="favorito-@producto.Id">
+                    <div class="card h-100 shadow-sm">
+                        @if (producto.Destacado)
+                        {
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-warning">⭐ Destacado</span>
+                            </div>
+                        }
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">@producto.Nombre</h5>
+                            
+                            @if (!string.IsNullOrEmpty(producto.Color))
+                            {
+                                <p class="text-muted mb-2">
+                                    <small>🎨 Color: @producto.Color</small>
+                                </p>
+                            }
+                            
+                            @if (!string.IsNullOrEmpty(producto.Descripcion))
+                            {
+                                <p class="card-text text-muted small">@producto.Descripcion</p>
+                            }
+                            
+                            <div class="mb-2">
+                                <span class="badge bg-info">📦 Stock: @producto.Stock</span>
+                            </div>
+                            
+                            @if (producto.TallasDisponibles != null && producto.TallasDisponibles.Count > 0)
+                            {
+                                <p class="text-muted small mb-2">
+                                    👟 Tallas: @string.Join(", ", producto.TallasDisponibles)
+                                </p>
+                            }
+                        </div>
+                        
+                        <div class="card-footer bg-white border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h4 class="mb-0 text-primary">$@producto.Precio.ToString("N2")</h4>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Tienda" asp-action="Detalle" asp-route-id="@producto.Id" 
+                                   class="btn btn-outline-primary btn-sm flex-grow-1">
+                                    👁️ Ver detalles
+                                </a>
+                                
+                                <button type="button" class="btn btn-danger btn-sm" 
+                                        onclick="eliminarDeFavoritos(@producto.Id)">
+                                    🗑️
+                                </button>
+                            </div>
+                            
+                            @if (producto.Stock > 0)
+                            {
+                                <button type="button" class="btn btn-success btn-sm w-100 mt-2" 
+                                        onclick="agregarAlCarritoDesdeAqui(@producto.Id)">
+                                    🛒 Agregar al carrito
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary btn-sm w-100 mt-2" disabled>
+                                    Sin stock
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function eliminarDeFavoritos(productoId) {
+            if (!confirm('¿Eliminar este producto de favoritos?')) {
+                return;
+            }
+
+            fetch('/Favoritos/EliminarAjax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productoId: productoId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Eliminar la card del DOM con animación
+                    const card = document.getElementById('favorito-' + productoId);
+                    if (card) {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.8)';
+                        card.style.transition = 'all 0.3s';
+                        
+                        setTimeout(() => {
+                            card.remove();
+                            
+                            // Si ya no hay favoritos, recargar la página para mostrar mensaje
+                            const remainingCards = document.querySelectorAll('[id^="favorito-"]');
+                            if (remainingCards.length === 0) {
+                                window.location.reload();
+                            }
+                        }, 300);
+                    }
+                    
+                    // Actualizar contador en header
+                    actualizarContadorFavoritos();
+                    
+                    // Mostrar mensaje
+                    mostrarMensaje('Producto eliminado de favoritos', 'success');
+                } else {
+                    mostrarMensaje('Error: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarMensaje('Error al eliminar de favoritos', 'danger');
+            });
+        }
+
+        function agregarAlCarritoDesdeAqui(productoId) {
+            fetch('/Carrito/Agregar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    productoId: productoId,
+                    cantidad: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarMensaje('Producto agregado al carrito', 'success');
+                    
+                    // Actualizar contador del carrito en header
+                    if (typeof actualizarContadorCarrito === 'function') {
+                        actualizarContadorCarrito();
+                    }
+                } else {
+                    mostrarMensaje('Error: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarMensaje('Error al agregar al carrito', 'danger');
+            });
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 80px; right: 20px; z-index: 9999; min-width: 300px;';
+            alertDiv.innerHTML = `
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    </script>
+}

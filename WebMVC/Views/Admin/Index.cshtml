@@ -1,0 +1,142 @@
+@using WebMVC.Controllers
+@model DashboardStatsViewModel
+
+@{
+    ViewData["Title"] = "Panel Admin";
+}
+
+<div class="container py-4">
+    <h1 class="h3 mb-4">Panel de Administrador</h1>
+
+    <!-- Estadísticas principales -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase mb-2">Total Ventas</h6>
+                    <h3 class="mb-0">@Model.TotalVentas.ToString("C")</h3>
+                    <small>@Model.NumPedidos pedidos completados</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase mb-2">Ventas del Mes</h6>
+                    <h3 class="mb-0">@Model.VentasMes.ToString("C")</h3>
+                    <small>Mes actual</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase mb-2">Pedidos Activos</h6>
+                    <h3 class="mb-0">@(Model.PedidosPendientes + Model.PedidosEnviados)</h3>
+                    <small>En proceso</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-secondary shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase mb-2">Usuarios</h6>
+                    <h3 class="mb-0">@Model.NumUsuarios</h3>
+                    <small>Registrados</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desglose de pedidos -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Estado de Pedidos</h5>
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded">
+                                <div style="font-size: 2rem; color: #ffc107;">📦</div>
+                                <h4 class="mt-2">@Model.PedidosPendientes</h4>
+                                <p class="mb-0 text-muted">En Almacén</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded">
+                                <div style="font-size: 2rem; color: #17a2b8;">🚚</div>
+                                <h4 class="mt-2">@Model.PedidosEnviados</h4>
+                                <p class="mb-0 text-muted">Enviados</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded">
+                                <div style="font-size: 2rem; color: #28a745;">✅</div>
+                                <h4 class="mt-2">@Model.PedidosEntregados</h4>
+                                <p class="mb-0 text-muted">Entregados</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accesos rápidos -->
+    <h5 class="mb-3">Gestión</h5>
+    
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📦</div>
+                    <h5 class="card-title">Gestionar Pedidos</h5>
+                    <p class="card-text text-muted">Cambia estados de pedidos: almacén → enviado → entregado</p>
+                    <a asp-action="Pedidos" class="btn btn-primary">Ir a Pedidos</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">👥</div>
+                    <h5 class="card-title">Gestionar Usuarios</h5>
+                    <p class="card-text text-muted">Administra usuarios, roles y permisos</p>
+                    <a asp-action="Usuarios" class="btn btn-primary">Ir a Usuarios</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">👟</div>
+                    <h5 class="card-title">Productos</h5>
+                    <p class="card-text text-muted">Administra inventario y catálogo de zapatos</p>
+                    <a asp-action="Index" asp-controller="Productos" class="btn btn-primary">Ver Productos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📊</div>
+                    <h5 class="card-title">Reportes</h5>
+                    <p class="card-text text-muted">Analíticas y reportes de ventas mensuales</p>
+                    <a asp-action="Reportes" class="btn btn-primary">Ver Reportes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="Tienda" asp-action="Index" class="btn btn-outline-secondary">
+            ← Volver a la tienda
+        </a>
+    </div>
+</div>

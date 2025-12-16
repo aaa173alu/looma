@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="ApplicationCore" namespace="ApplicationCore.Domain.EN">
+  <class name="Usuario" table="Usuario">
+    <id name="Id" column="Id" type="long">
+      <generator class="identity"/>
+    </id>
+    <property name="Nombre" column="Nombre" />
+    <property name="Email" column="Email" />
+    <property name="Contrasenya" column="Contrasenya" />
+    <property name="Telefono" column="Telefono" />
+    <property name="Direccion" column="Direccion" />
+    <property name="Rol" column="Rol" />
+  </class>
+</hibernate-mapping>

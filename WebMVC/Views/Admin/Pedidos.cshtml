@@ -1,0 +1,83 @@
+@model List<WebMVC.Controllers.AdminPedidoViewModel>
+@using ApplicationCore.Domain.Enums
+@{
+    ViewData["Title"] = "Pedidos (Admin)";
+    var opciones = new List<(EstadoPedido Estado, string Label)>
+    {
+        (EstadoPedido.comprado, "En almacén (pagado)"),
+        (EstadoPedido.validado, "Enviado"),
+        (EstadoPedido.recibido, "Entregado"),
+        (EstadoPedido.rechazado, "Rechazado")
+    };
+}
+
+<div class="container py-4">
+    <h1 class="h3 mb-3">Gestión de pedidos</h1>
+    <p class="text-muted">Solo se muestran pedidos pagados. Cambia el estado para reflejar el avance.</p>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No hay pedidos pagados aún.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>@p.Id</td>
+                            <td>@p.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@p.UsuarioId</td>
+                            <td>@p.Total.ToString("C")</td>
+                            <td>
+                                <span class="badge bg-secondary" id="estado-@p.Id">@opciones.First(o => o.Estado == p.Estado).Label</span>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm d-inline w-auto" id="sel-@p.Id">
+                                    @foreach (var op in opciones)
+                                    {
+                                        <option value="@((int)op.Estado)" selected="@(p.Estado == op.Estado)">@op.Label</option>
+                                    }
+                                </select>
+                                <button class="btn btn-sm btn-primary ms-2" onclick="cambiarEstado(@p.Id)">Guardar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+<script>
+    async function cambiarEstado(pedidoId) {
+        const sel = document.getElementById(`sel-${pedidoId}`);
+        const estado = parseInt(sel.value);
+        const res = await fetch('/Admin/CambiarEstado', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pedidoId, estado })
+        });
+        const data = await res.json();
+        if (data.success) {
+            const texto = sel.options[sel.selectedIndex].text;
+            document.getElementById(`estado-${pedidoId}`).innerText = texto;
+        } else {
+            alert(data.message || 'No se pudo actualizar');
+        }
+    }
+</script>
+}

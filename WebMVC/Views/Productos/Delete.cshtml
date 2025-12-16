@@ -1,0 +1,36 @@
+@model ApplicationCore.Domain.EN.Producto
+
+@{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<h1>Eliminar Zapato</h1>
+
+<div class="alert alert-warning">
+    <h4>¿Está seguro de que desea eliminar este producto?</h4>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nombre:</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+
+            <dt class="col-sm-3">Precio:</dt>
+            <dd class="col-sm-9">$@Model.Precio</dd>
+
+            <dt class="col-sm-3">Stock:</dt>
+            <dd class="col-sm-9">@Model.Stock unidades</dd>
+
+            <dt class="col-sm-3">Color:</dt>
+            <dd class="col-sm-9">@Model.Color</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post" class="mt-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

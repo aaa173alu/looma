@@ -1,0 +1,106 @@
+@model ApplicationCore.Domain.EN.Usuario
+
+@{
+    ViewData["Title"] = "Eliminar Cuenta";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">⚠️ Eliminar Cuenta</h4>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">⚠️ Esta acción es irreversible</h5>
+                        <p class="mb-0">Una vez eliminada tu cuenta, no podrás recuperarla. Se eliminarán permanentemente:</p>
+                    </div>
+
+                    <ul class="mb-4">
+                        <li>Tu información personal (nombre, email, teléfono)</li>
+                        <li>Tu historial de pedidos</li>
+                        <li>Tu carrito de compras</li>
+                        <li>Tus productos favoritos</li>
+                        <li>Tus valoraciones y comentarios</li>
+                    </ul>
+
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h6 class="card-title">Cuenta a eliminar:</h6>
+                            <p class="mb-1"><strong>@Model.Nombre</strong></p>
+                            <p class="mb-0 text-muted">@Model.Email</p>
+                        </div>
+                    </div>
+
+                    <form method="post" asp-action="ConfirmarEliminarCuenta" id="deleteForm">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <strong>Confirma tu contraseña para continuar:</strong>
+                            </label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Ingresa tu contraseña actual"
+                                   required>
+                            <small class="form-text text-muted">
+                                Por seguridad, debes verificar tu identidad
+                            </small>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                            <label class="form-check-label" for="confirmDelete">
+                                <strong>Confirmo que deseo eliminar mi cuenta permanentemente</strong>
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg" id="btnDelete" disabled>
+                                🗑️ Sí, eliminar mi cuenta permanentemente
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                                ← Cancelar y volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    Si tienes problemas, <a asp-action="Contacto">contacta con soporte</a>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Habilitar botón solo cuando el checkbox esté marcado
+        document.getElementById('confirmDelete').addEventListener('change', function() {
+            document.getElementById('btnDelete').disabled = !this.checked;
+        });
+
+        // Confirmación adicional antes de enviar
+        document.getElementById('deleteForm').addEventListener('submit', function(e) {
+            const confirmed = confirm('¿ESTÁS COMPLETAMENTE SEGURO?\n\nEsta acción NO se puede deshacer.\nTu cuenta y todos tus datos serán eliminados permanentemente.');
+            if (!confirmed) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+}

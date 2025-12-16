@@ -1,0 +1,75 @@
+@model ApplicationCore.Domain.EN.Producto
+
+@{
+    ViewData["Title"] = "Editar Producto";
+}
+
+<h1>Editar Zapato</h1>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Nombre" class="control-label">Nombre del Zapato</label>
+                <input asp-for="Nombre" class="form-control" required />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Descripcion" class="control-label">Descripción</label>
+                <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Precio" class="control-label">Precio ($)</label>
+                <input asp-for="Precio" class="form-control" type="number" step="0.01" required />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Stock" class="control-label">Stock</label>
+                <input asp-for="Stock" class="form-control" type="number" required />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Color" class="control-label">Color</label>
+                <input asp-for="Color" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Foto del producto</label>
+                <input type="file" name="fotoArchivo" class="form-control" accept="image/*" />
+                <small class="text-muted">Sube una sola imagen. Si no adjuntas, se mantiene la actual.</small>
+            </div>
+            
+            <div class="form-check mb-3">
+                <input asp-for="Destacado" class="form-check-input" />
+                <label asp-for="Destacado" class="form-check-label">Producto Destacado ⭐</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Guardar Cambios" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

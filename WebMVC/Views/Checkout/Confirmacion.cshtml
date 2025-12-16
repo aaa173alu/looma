@@ -1,0 +1,141 @@
+@using System.Globalization
+@{
+    ViewData["Title"] = "Pedido Confirmado";
+    var pedidoId = ViewBag.PedidoId as int?;
+    var nombre = ViewBag.Nombre as string;
+    var direccion = ViewBag.Direccion as string;
+    decimal? total = null;
+    if (ViewBag.Total is string totalStr && decimal.TryParse(totalStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsed))
+    {
+        total = parsed;
+    }
+    var items = ViewBag.Items as List<dynamic>;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Confirmación exitosa -->
+            <div class="text-center mb-4">
+                <div class="mb-4">
+                    <div style="font-size: 80px; color: #28a745;">✓</div>
+                </div>
+                <h1 class="text-success mb-3">¡Compra realizada con éxito!</h1>
+                <p class="lead text-muted">Tu pedido ha sido procesado correctamente</p>
+            </div>
+
+            <!-- Información del pedido -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">📦 Información del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Número de pedido:</strong></p>
+                            <p class="text-muted">#@pedidoId</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Estado:</strong></p>
+                            <span class="badge bg-warning text-dark">Pendiente de envío</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>📍 Dirección de envío:</strong></p>
+                            <p class="text-muted mb-0">@nombre</p>
+                            <p class="text-muted">@direccion</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>💰 Total pagado:</strong></p>
+                            <p class="h4 text-success mb-0">@total?.ToString("C")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (items != null && items.Count > 0)
+            {
+                <!-- Productos del pedido -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">🛍️ Productos del Pedido</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var item in items)
+                        {
+                            <div class="d-flex align-items-center border-bottom pb-3 mb-3">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">@item.NombreProducto</h6>
+                                    <p class="text-muted small mb-0">
+                                        Talla: @item.Talla | Cantidad: @item.Cantidad
+                                    </p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-0 fw-bold">@item.Subtotal.ToString("C")</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Información adicional -->
+            <div class="alert alert-info">
+                <h6 class="alert-heading">📧 ¿Qué sigue?</h6>
+                <ul class="mb-0 small">
+                    <li>Recibirás un correo de confirmación en breve</li>
+                    <li>El pedido será procesado en las próximas 24-48 horas</li>
+                    <li>Recibirás actualizaciones sobre el estado del envío</li>
+                    <li>Puedes consultar tus pedidos en tu perfil</li>
+                </ul>
+            </div>
+
+            <!-- Acciones -->
+            <div class="d-grid gap-2 mt-4">
+                <a href="@Url.Action("MisPedidos", "Pedido")" class="btn btn-primary btn-lg">
+                    📋 Ver Mis Pedidos
+                </a>
+                <a href="@Url.Action("Index", "Tienda")" class="btn btn-outline-secondary">
+                    🏠 Volver a la Tienda
+                </a>
+            </div>
+
+            <!-- Compartir -->
+            <div class="text-center mt-4">
+                <p class="text-muted small mb-2">¿Te ha gustado tu compra?</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="return false;">
+                        ⭐ Valorar productos
+                    </a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary" onclick="return false;">
+                        🔗 Compartir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Limpiar el carrito del localStorage si se usa
+        localStorage.removeItem('carrito');
+        
+        // Animación de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+}

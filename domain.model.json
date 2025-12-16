@@ -1,0 +1,145 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "generatedFrom": "diagrama2.wsd",
+  "enums": {
+    "EstadoPedido": ["carrito", "realizado", "comprado", "rechazado", "recibido", "validado"]
+  },
+  "entities": [
+    {
+      "name": "Usuario",
+      "attributes": {
+        "idUsuario": {"type": "integer"},
+        "nombre": {"type": "string"},
+        "email": {"type": "string"},
+        "contrasenya": {"type": "string"},
+        "telefono": {"type": "string", "nullable": true},
+        "direccion": {"type": "string", "nullable": true},
+        "rol": {"type": "string", "nullable": true}
+      }
+    },
+    {
+      "name": "Producto",
+      "attributes": {
+        "idProducto": {"type": "integer"},
+        "nombre": {"type": "string"},
+        "descripcion": {"type": "string", "nullable": true},
+        "precio": {"type": "number"},
+        "tallasDisponibles": {"type": "array", "items": {"type": "string"}},
+        "fotos": {"type": "array", "items": {"type": "string"}, "nullable": true},
+        "stock": {"type": "integer"},
+        "destacado": {"type": "boolean"}
+      }
+    },
+    {
+      "name": "ItemPedido",
+      "attributes": {
+        "productoId": {"type": "integer"},
+        "cantidad": {"type": "integer"},
+        "talla": {"type": "string", "nullable": true}
+      }
+    },
+    {
+      "name": "Pedido",
+      "attributes": {
+        "idPedido": {"type": "integer"},
+        "fecha": {"type": "string", "format": "date-time"},
+        "total": {"type": "number"},
+        "direccionEnvio": {"type": "string"},
+        "estado": {"type": "string", "enum": "EstadoPedido"},
+        "usuarioId": {"type": "integer"}
+      }
+    },
+    {
+      "name": "Ajustes",
+      "attributes": {
+        "idAjustes": {"type": "integer"},
+        "tema": {"type": "string"},
+        "notificaciones": {"type": "boolean"}
+      }
+    },
+    {
+      "name": "Favoritos",
+      "attributes": {
+        "idFavoritos": {"type": "integer"},
+        "fechaCreacion": {"type": "string", "format": "date-time"},
+        "usuarioId": {"type": "integer"},
+        "productoId": {"type": "integer"}
+      }
+    },
+    {
+      "name": "Valoracion",
+      "attributes": {
+        "idValoracion": {"type": "integer"},
+        "valoracion": {"type": "integer"},
+        "comentario": {"type": "string", "nullable": true},
+        "usuarioId": {"type": "integer"},
+        "productoId": {"type": "integer"}
+      }
+    },
+    {
+      "name": "Sesion",
+      "attributes": {
+        "idSesion": {"type": "integer"},
+        "fechaInicio": {"type": "string", "format": "date-time"},
+        "fechaFin": {"type": "string", "format": "date-time", "nullable": true},
+        "activa": {"type": "boolean"},
+        "usuarioId": {"type": "integer"}
+      }
+    },
+    {
+      "name": "Categoria",
+      "attributes": {
+        "idCategoria": {"type": "integer"},
+        "nombre": {"type": "string"}
+      }
+    },
+    {
+      "name": "Pago",
+      "attributes": {
+        "idPago": {"type": "integer"},
+        "metodoPago": {"type": "string"},
+        "fechaPago": {"type": "string", "format": "date-time"},
+        "monto": {"type": "number"},
+        "pedidoId": {"type": "integer", "nullable": true}
+      }
+    },
+    {
+      "name": "Ayuda",
+      "attributes": {
+        "idAyuda": {"type": "integer"},
+        "pregunta": {"type": "string"},
+        "respuesta": {"type": "string", "nullable": true},
+        "usuarioId": {"type": "integer"}
+      }
+    },
+    {
+      "name": "Perfil",
+      "attributes": {
+        "idPerfil": {"type": "integer"},
+        "nombre": {"type": "string"},
+        "email": {"type": "string"},
+        "contrasenya": {"type": "string"},
+        "telefono": {"type": "string", "nullable": true},
+        "usuarioId": {"type": "integer"}
+      }
+    },
+    {
+      "name": "Carrito",
+      "attributes": {
+        "idCarrito": {"type": "integer"},
+        "total": {"type": "number"},
+        "fechaCreacion": {"type": "string", "format": "date-time"},
+        "usuarioId": {"type": "integer"}
+      }
+    }
+  ],
+  "relationships": [
+    {"from":"Valoracion","to":"Usuario","multiplicity":"*->1","name":"valora"},
+    {"from":"Valoracion","to":"Producto","multiplicity":"*->1","name":"valorado"},
+    {"from":"Usuario","to":"Favoritos","multiplicity":"1->*","name":"gestiona"},
+    {"from":"ItemPedido","to":"Producto","multiplicity":"*->1","name":"referencia"},
+    {"from":"Usuario","to":"Pedido","multiplicity":"1->*","name":"realiza"},
+    {"from":"Pedido","to":"ItemPedido","multiplicity":"1*->*","name":"incluye"}
+  ]
+}

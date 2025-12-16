@@ -1,0 +1,110 @@
+@model ApplicationCore.Domain.EN.Usuario
+
+@{
+    ViewData["Title"] = "Editar Perfil";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-4">✏️ Editar Perfil</h1>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @ViewBag.Error
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <form method="post" asp-action="EditarPerfil">
+                @Html.AntiForgeryToken()
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Información Personal</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre completo *</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="@Model.Nombre" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico *</label>
+                            <input type="email" class="form-control" id="email" name="email" value="@Model.Email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Número de teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" value="@Model.Telefono" placeholder="+34 600 000 000">
+                            <small class="form-text text-muted">Opcional</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Cambiar Contraseña</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Deja estos campos en blanco si no deseas cambiar tu contraseña</p>
+
+                        <div class="mb-3">
+                            <label for="passwordActual" class="form-label">Contraseña actual</label>
+                            <input type="password" class="form-control" id="passwordActual" name="passwordActual">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passwordNueva" class="form-label">Nueva contraseña</label>
+                            <input type="password" class="form-control" id="passwordNueva" name="passwordNueva">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passwordConfirmar" class="form-label">Confirmar nueva contraseña</label>
+                            <input type="password" class="form-control" id="passwordConfirmar" name="passwordConfirmar">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        ← Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        💾 Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Validar que las contraseñas coincidan antes de enviar
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const passwordNueva = document.getElementById('passwordNueva').value;
+            const passwordConfirmar = document.getElementById('passwordConfirmar').value;
+            const passwordActual = document.getElementById('passwordActual').value;
+
+            if (passwordNueva || passwordConfirmar) {
+                if (!passwordActual) {
+                    alert('Debes ingresar tu contraseña actual para cambiarla');
+                    e.preventDefault();
+                    return false;
+                }
+                if (passwordNueva !== passwordConfirmar) {
+                    alert('Las contraseñas nuevas no coinciden');
+                    e.preventDefault();
+                    return false;
+                }
+                if (passwordNueva.length < 6) {
+                    alert('La nueva contraseña debe tener al menos 6 caracteres');
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    </script>
+}

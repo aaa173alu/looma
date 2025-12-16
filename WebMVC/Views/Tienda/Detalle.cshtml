@@ -1,0 +1,376 @@
+@model ApplicationCore.Domain.EN.Producto
+
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Catálogo</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Nombre</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-md-5">
+            <div class="card">
+                @{ var fotoPrincipal = Model.Fotos != null && Model.Fotos.Any() ? Model.Fotos.First() : null; }
+                <div class="card-body text-center bg-light" style="min-height: 400px; display: flex; align-items: center; justify-content: center;">
+                    @if (!string.IsNullOrEmpty(fotoPrincipal))
+                    {
+                        <img src="@fotoPrincipal" alt="@Model.Nombre" class="img-fluid" style="max-height: 360px; object-fit: contain;">
+                    }
+                    else
+                    {
+                        <span style="font-size: 200px;">👟</span>
+                    }
+                </div>
+
+                @if (Model.Fotos != null && Model.Fotos.Count > 1)
+                {
+                    <div class="d-flex flex-wrap gap-2 p-3 border-top bg-white">
+                        @foreach (var foto in Model.Fotos.Skip(1))
+                        {
+                            <img src="@foto" alt="@Model.Nombre" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;" />
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Información del producto -->
+        <div class="col-md-7">
+            <h1 class="mb-3">@Model.Nombre</h1>
+            
+            @if (Model.Destacado)
+            {
+                <span class="badge bg-warning text-dark mb-3">⭐ Producto Destacado</span>
+            }
+
+            <h2 class="text-primary mb-4">@Model.Precio.ToString("C")</h2>
+
+            @if (!string.IsNullOrEmpty(Model.Descripcion))
+            {
+                <div class="mb-4">
+                    <h5>Descripción</h5>
+                    <p class="text-muted">@Model.Descripcion</p>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Color))
+            {
+                <div class="mb-3">
+                    <strong>Color:</strong> <span class="badge bg-secondary">@Model.Color</span>
+                </div>
+            }
+
+            <div class="mb-4">
+                <strong>Disponibilidad:</strong>
+                @if (Model.Stock > 10)
+                {
+                    <span class="badge bg-success">✓ En stock (@Model.Stock unidades)</span>
+                }
+                else if (Model.Stock > 0)
+                {
+                    <span class="badge bg-warning text-dark">⚠️ Pocas unidades (@Model.Stock)</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">✗ Agotado</span>
+                }
+            </div>
+
+            @if (Model.TallasDisponibles != null && Model.TallasDisponibles.Any())
+            {
+                <div class="mb-4">
+                    <h5>Tallas disponibles</h5>
+                    <div class="btn-group" role="group">
+                        @foreach (var talla in Model.TallasDisponibles)
+                        {
+                            <input type="radio" class="btn-check" name="talla" id="talla@(talla)" value="@talla" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="talla@(talla)">@talla</label>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Stock > 0)
+            {
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" value="1" min="1" max="@Model.Stock">
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <button type="button" class="btn btn-success btn-lg" id="btn-comprar-ahora">
+                        ⚡ Comprar ahora
+                    </button>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex">
+                    <button type="button" class="btn btn-primary btn-lg flex-fill" id="btn-agregar-carrito">
+                        🛒 Añadir al carrito
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-lg" id="btn-favorito" onclick="toggleFavoritoDetalle(@Model.Id)">
+                        <span id="favorito-icon">🤍</span>
+                    </button>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                    <small><strong>💡 Comprar ahora:</strong> Finaliza tu compra directamente sin pasar por el carrito.</small>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    Este producto está actualmente agotado.
+                </div>
+            }
+
+            <hr class="my-4">
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                ← Volver al catálogo
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Cargar estado inicial del favorito
+        document.addEventListener('DOMContentLoaded', function() {
+            const productoId = @Model.Id;
+            verificarEstadoFavoritoDetalle(productoId);
+        });
+
+        function verificarEstadoFavoritoDetalle(productoId) {
+            fetch('/Favoritos/VerificarFavorito?productoId=' + productoId)
+                .then(response => response.json())
+                .then(data => {
+                    const icon = document.getElementById('favorito-icon');
+                    const btn = document.getElementById('btn-favorito');
+                    if (data.esFavorito) {
+                        icon.textContent = '❤️';
+                        btn.classList.remove('btn-outline-danger');
+                        btn.classList.add('btn-danger');
+                    } else {
+                        icon.textContent = '🤍';
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-outline-danger');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function toggleFavoritoDetalle(productoId) {
+            const icon = document.getElementById('favorito-icon');
+            const btn = document.getElementById('btn-favorito');
+            const esFavorito = icon.textContent === '❤️';
+
+            if (esFavorito) {
+                // Eliminar de favoritos
+                fetch('/Favoritos/EliminarAjax', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productoId: productoId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        icon.textContent = '🤍';
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-outline-danger');
+                        
+                        // Actualizar contador en header
+                        if (typeof actualizarContadorFavoritos === 'function') {
+                            actualizarContadorFavoritos();
+                        }
+                        
+                        mostrarMensajeDetalle('Eliminado de favoritos', 'info');
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar de favoritos');
+                });
+            } else {
+                // Agregar a favoritos
+                fetch('/Favoritos/Agregar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productoId: productoId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        icon.textContent = '❤️';
+                        btn.classList.remove('btn-outline-danger');
+                        btn.classList.add('btn-danger');
+                        
+                        // Actualizar contador en header
+                        if (typeof actualizarContadorFavoritos === 'function') {
+                            actualizarContadorFavoritos();
+                        }
+                        
+                        mostrarMensajeDetalle('Agregado a favoritos ❤️', 'success');
+                    } else {
+                        mostrarMensajeDetalle('❌ Error: ' + data.message, 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarMensajeDetalle('❌ Error al agregar a favoritos', 'danger');
+                });
+            }
+        }
+
+        function mostrarMensajeDetalle(mensaje, tipo) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
+            alertDiv.innerHTML = `
+                <strong>${mensaje}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 150);
+            }, 3000);
+        }
+
+        document.getElementById('btn-agregar-carrito')?.addEventListener('click', function() {
+            const productoId = @Model.Id;
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+            const tallaRadio = document.querySelector('input[name="talla"]:checked');
+            const talla = tallaRadio ? tallaRadio.value : null;
+
+            // Validar talla si hay tallas disponibles
+            @if (Model.TallasDisponibles != null && Model.TallasDisponibles.Any())
+            {
+                <text>
+                if (!talla) {
+                    mostrarMensajeDetalle('⚠️ Por favor, selecciona una talla antes de continuar', 'warning');
+                    return;
+                }
+                </text>
+            }
+
+            // Deshabilitar botón temporalmente
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Agregando...';
+
+            // Enviar petición
+            fetch('/Carrito/Agregar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productoId: productoId,
+                    cantidad: cantidad,
+                    talla: talla
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualizar contador del carrito en el header
+                    if (typeof actualizarContadorCarrito === 'function') {
+                        actualizarContadorCarrito();
+                    }
+
+                    // Mostrar mensaje de éxito
+                    btn.innerHTML = '✓ ¡Agregado!';
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-success');
+
+                    // Restaurar botón después de 2 segundos
+                    setTimeout(() => {
+                        btn.innerHTML = '🛒 Añadir al carrito';
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-primary');
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    mostrarMensajeDetalle('❌ Error: ' + (data.message || 'Error desconocido'), 'danger');
+                    btn.innerHTML = '🛍️ Añadir al carrito';
+                    btn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarMensajeDetalle('❌ Error al agregar el producto al carrito', 'danger');
+                btn.innerHTML = '🛍️ Añadir al carrito';
+                btn.disabled = false;
+            });
+        });
+
+        // Botón Comprar Ahora
+        document.getElementById('btn-comprar-ahora')?.addEventListener('click', function() {
+            const productoId = @Model.Id;
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+            const tallaRadio = document.querySelector('input[name="talla"]:checked');
+            const talla = tallaRadio ? tallaRadio.value : null;
+
+            // Validar talla si hay tallas disponibles
+            @if (Model.TallasDisponibles != null && Model.TallasDisponibles.Any())
+            {
+                <text>
+                if (!talla) {
+                    mostrarMensajeDetalle('⚠️ Por favor, selecciona una talla antes de continuar', 'warning');
+                    return;
+                }
+                </text>
+            }
+
+            // Deshabilitar botón temporalmente
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Procesando...';
+
+            // Guardar compra directa y redirigir a checkout (sin usar carrito completo)
+            fetch('/Checkout/CompraDirecta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productoId: productoId,
+                    cantidad: cantidad,
+                    talla: talla
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/Checkout/Index';
+                } else {
+                    mostrarMensajeDetalle('❌ Error: ' + (data.message || 'Error desconocido'), 'danger');
+                    btn.innerHTML = '⚡ Comprar ahora';
+                    btn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarMensajeDetalle('❌ Error al procesar la compra', 'danger');
+                btn.innerHTML = '⚡ Comprar ahora';
+                btn.disabled = false;
+            });
+        });
+    </script>
+}

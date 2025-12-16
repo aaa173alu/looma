@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Cerrar Sesión";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4" style="font-size: 4rem;">
+                        🚪
+                    </div>
+                    <h2 class="mb-3">¿Desea cerrar sesión?</h2>
+                    <p class="text-muted mb-4">
+                        Estás a punto de cerrar tu sesión. Tendrás que volver a iniciar sesión para acceder a tu cuenta.
+                    </p>
+
+                    <form method="post" asp-action="ConfirmarCerrarSesion" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-lg me-2">
+                            ✓ Sí, cerrar sesión
+                        </button>
+                    </form>
+                    
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        ✕ Cancelar
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-controller="Tienda" asp-action="Index" class="text-muted">
+                    ← Volver a la tienda
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

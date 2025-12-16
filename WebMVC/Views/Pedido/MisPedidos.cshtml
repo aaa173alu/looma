@@ -1,0 +1,176 @@
+@model WebMVC.Controllers.MisPedidosViewModel
+@{
+    ViewData["Title"] = "Mis pedidos";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Mis pedidos</h1>
+            <p class="text-muted mb-0">Consulta el estado, sigue tus envíos y valora los productos entregados.</p>
+        </div>
+        <a asp-controller="Tienda" asp-action="Index" class="btn btn-outline-secondary">Volver a la tienda</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">En curso</h5>
+                    <span class="badge bg-warning text-dark">@Model.Pendientes.Count</span>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Pendientes.Any())
+                    {
+                        <div class="text-center text-muted py-4">No tienes pedidos pendientes.</div>
+                    }
+                    else
+                    {
+                        @foreach (var pedido in Model.Pendientes)
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="fw-bold">Pedido #@pedido.Id</div>
+                                        <div class="text-muted small">@pedido.Fecha.ToString("dd/MM/yyyy")</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold">@pedido.Total.ToString("C")</div>
+                                        <span class="badge bg-secondary">@pedido.EstadoLabel</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar" role="progressbar" style="width: @pedido.Progreso%" aria-valuenow="@pedido.Progreso" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small class="text-muted">Progreso @pedido.Progreso% · @pedido.Direccion</small>
+                                </div>
+                                <div class="mt-3">
+                                    @foreach (var item in pedido.Items)
+                                    {
+                                        <div class="d-flex justify-content-between small mb-1">
+                                            <div>@item.NombreProducto (x@item.Cantidad) · Talla @item.Talla</div>
+                                            <div class="fw-semibold">@item.Subtotal.ToString("C")</div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="mt-3 d-flex gap-2">
+                                    <a asp-action="Seguimiento" asp-route-id="@pedido.Id" class="btn btn-sm btn-outline-primary">Seguir envío</a>
+                                    <span class="text-muted small align-self-center">Estado: @pedido.EstadoLabel</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Entregados</h5>
+                    <span class="badge bg-success">@Model.Entregados.Count</span>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Entregados.Any())
+                    {
+                        <div class="text-center text-muted py-4">Aún no tienes pedidos entregados.</div>
+                    }
+                    else
+                    {
+                        @foreach (var pedido in Model.Entregados)
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="fw-bold">Pedido #@pedido.Id</div>
+                                        <div class="text-muted small">@pedido.Fecha.ToString("dd/MM/yyyy")</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold">@pedido.Total.ToString("C")</div>
+                                        <span class="badge bg-success">Entregado</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-muted small">@pedido.Direccion</div>
+                                <div class="mt-3">
+                                    @foreach (var item in pedido.Items)
+                                    {
+                                        <div class="border rounded p-2 mb-2">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <div class="fw-semibold">@item.NombreProducto</div>
+                                                    <div class="text-muted small">Talla @item.Talla · x@item.Cantidad</div>
+                                                </div>
+                                                <div class="text-end fw-semibold">@item.Subtotal.ToString("C")</div>
+                                            </div>
+                                            <div class="mt-2 d-flex align-items-center gap-2">
+                                                <button class="btn btn-sm btn-outline-primary" data-producto="@item.ProductoId" data-pedido="@pedido.Id" onclick="openRating(this)">Valorar</button>
+                                                <div class="text-success small d-none" id="ok-@item.ProductoId">¡Gracias por valorar!</div>
+                                            </div>
+                                            <div class="mt-2 collapse" id="rate-@item.ProductoId">
+                                                <form class="rating-form" data-producto="@item.ProductoId">
+                                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                                        <label class="small mb-0">Puntuación:</label>
+                                                        <select class="form-select form-select-sm" name="valor" style="width: 120px;">
+                                                            <option value="5">5 - Excelente</option>
+                                                            <option value="4">4 - Muy bueno</option>
+                                                            <option value="3">3 - Bueno</option>
+                                                            <option value="2">2 - Regular</option>
+                                                            <option value="1">1 - Malo</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <textarea class="form-control" name="comentario" rows="2" placeholder="Comparte tu experiencia (opcional)"></textarea>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <button type="submit" class="btn btn-sm btn-primary">Enviar valoración</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="closeRating(@item.ProductoId)">Cancelar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function openRating(btn) {
+        const id = btn.dataset.producto;
+        document.getElementById(`rate-${id}`)?.classList.remove('collapse');
+    }
+
+    function closeRating(id) {
+        document.getElementById(`rate-${id}`)?.classList.add('collapse');
+    }
+
+    document.querySelectorAll('.rating-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productoId = form.dataset.producto;
+            const valor = parseInt(form.querySelector('[name="valor"]').value, 10);
+            const comentario = form.querySelector('[name="comentario"]').value;
+
+            const res = await fetch('/Pedido/Valorar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productoId, valor, comentario })
+            });
+            const data = await res.json();
+            if (data.success) {
+                form.classList.add('d-none');
+                document.getElementById(`ok-${productoId}`)?.classList.remove('d-none');
+            } else {
+                alert(data.message || 'No se pudo registrar la valoración');
+            }
+        });
+    });
+</script>
+}

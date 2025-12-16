@@ -1,0 +1,329 @@
+@model IEnumerable<ApplicationCore.Domain.EN.Producto>
+
+@{
+    ViewData["Title"] = "Catálogo de Zapatos";
+    var productoNovedad = ViewBag.ProductoNovedad as ApplicationCore.Domain.EN.Producto;
+}
+
+<div class="container-fluid">
+    @if (Context.Session.GetString("UsuarioRol") == "Admin")
+    {
+        <div class="d-flex justify-content-end mb-2">
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                &larr; Volver al Dashboard
+            </a>
+        </div>
+    }
+
+    <h1 class="mb-4">🛍️ Catálogo de Zapatos</h1>
+
+    <!-- Banner de Novedad -->
+    @if (productoNovedad != null)
+    {
+        var fotoNovedad = productoNovedad.Fotos != null && productoNovedad.Fotos.Any()
+            ? productoNovedad.Fotos.First()
+            : null;
+        <div class="card mb-4 border-0 shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
+            <div class="row g-0">
+                <div class="col-md-8 d-flex align-items-center">
+                    <div class="card-body text-white p-5">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-warning text-dark px-3 py-2 me-2" style="font-size: 1.1rem; letter-spacing: 1px;">
+                                ✨ NOVEDAD
+                            </span>
+                            <span class="badge bg-light text-dark px-3 py-2" style="font-size: 0.9rem;">
+                                ¡RECIÉN LLEGADO!
+                            </span>
+                        </div>
+                        <h2 class="card-title fw-bold mb-3" style="font-size: 2.5rem;">@productoNovedad.Nombre</h2>
+                        <p class="card-text mb-3" style="font-size: 1.2rem; opacity: 0.95;">
+                            @if (!string.IsNullOrEmpty(productoNovedad.Descripcion))
+                            {
+                                @productoNovedad.Descripcion
+                            }
+                            else
+                            {
+                                <text>Descubre nuestro último modelo. Diseño innovador, máximo confort y estilo único. ¡No te lo pierdas!</text>
+                            }
+                        </p>
+                        <div class="d-flex align-items-center mb-4">
+                            <span class="badge bg-light text-dark me-2 px-3 py-2" style="font-size: 1rem;">
+                                🎨 @(productoNovedad.Color ?? "Varios colores")
+                            </span>
+                            <span class="badge bg-light text-dark px-3 py-2" style="font-size: 1rem;">
+                                📦 Stock: @productoNovedad.Stock unidades
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <h3 class="text-warning fw-bold mb-0 me-4" style="font-size: 2.5rem;">@productoNovedad.Precio.ToString("C")</h3>
+                            <a href="@Url.Action("Detalle", "Tienda", new { id = productoNovedad.Id })" class="btn btn-warning btn-lg px-4 py-2">
+                                <strong>Ver Detalles →</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center justify-content-center p-5" style="background: rgba(255,255,255,0.1);">
+                    <div class="text-center">
+                        @if (!string.IsNullOrEmpty(fotoNovedad))
+                        {
+                            <img src="@fotoNovedad" alt="@productoNovedad.Nombre" class="img-fluid rounded shadow" style="max-height: 240px; object-fit: contain; background: #fff; padding: 12px;" />
+                        }
+                        else
+                        {
+                            <div style="font-size: 180px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));">
+                                👟
+                            </div>
+                        }
+                        @if (productoNovedad.Destacado)
+                        {
+                            <span class="badge bg-warning text-dark mt-3 px-4 py-2" style="font-size: 1rem;">
+                                ⭐ DESTACADO
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">🔍 Filtros de búsqueda</h5>
+            <form method="get" asp-action="Index">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="@ViewBag.Nombre" placeholder="Buscar por nombre...">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="precioMin" class="form-label">Precio mínimo</label>
+                        <input type="number" step="0.01" class="form-control" id="precioMin" name="precioMin" value="@ViewBag.PrecioMin" placeholder="€">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="precioMax" class="form-label">Precio máximo</label>
+                        <input type="number" step="0.01" class="form-control" id="precioMax" name="precioMax" value="@ViewBag.PrecioMax" placeholder="€">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="color" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="color" name="color" value="@ViewBag.Color" placeholder="Color">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label d-block">Destacado</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="destacado" id="destacado" value="true" @(ViewBag.Destacado == true ? "checked" : "")>
+                            <label class="form-check-label" for="destacado">
+                                Solo destacados
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grid de Productos -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (item.Destacado)
+                    {
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark">⭐ Destacado</span>
+                        </div>
+                    }
+                    
+                    <!-- Botón de favoritos -->
+                    <div class="position-absolute top-0 start-0 m-2">
+                        <button class="btn btn-light btn-sm rounded-circle favorito-btn" 
+                                data-producto-id="@item.Id"
+                                onclick="toggleFavorito(@item.Id, this)"
+                                style="width: 40px; height: 40px; padding: 0; border: 2px solid #ddd;">
+                            <span class="favorito-icon">🤍</span>
+                        </button>
+                    </div>
+                    
+                    @{ var fotoPrincipal = item.Fotos != null && item.Fotos.Any() ? item.Fotos.First() : null; }
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        @if (!string.IsNullOrEmpty(fotoPrincipal))
+                        {
+                            <img src="@fotoPrincipal" alt="@item.Nombre" class="img-fluid" style="max-height: 190px; object-fit: contain;">
+                        }
+                        else
+                        {
+                            <span style="font-size: 80px;">👟</span>
+                        }
+                    </div>
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Nombre</h5>
+                        <p class="card-text text-muted small">@(item.Descripcion ?? "Sin descripción")</p>
+                        
+                        @if (!string.IsNullOrEmpty(item.Color))
+                        {
+                            <p class="mb-2"><small><strong>Color:</strong> @item.Color</small></p>
+                        }
+                        
+                        <p class="mb-2">
+                            <strong>Stock:</strong> 
+                            @if (item.Stock > 10)
+                            {
+                                <span class="text-success">✓ Disponible (@item.Stock)</span>
+                            }
+                            else if (item.Stock > 0)
+                            {
+                                <span class="text-warning">⚠️ Pocas unidades (@item.Stock)</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">✗ Agotado</span>
+                            }
+                        </p>
+                        
+                        <h4 class="text-primary mb-3">@item.Precio.ToString("C")</h4>
+                        
+                        <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-primary w-100">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle"></i> No se encontraron productos con los filtros seleccionados.
+        </div>
+    }
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+    }
+    .favorito-btn {
+        transition: all 0.2s;
+    }
+    .favorito-btn:hover {
+        transform: scale(1.1);
+        border-color: #ff0000 !important;
+    }
+</style>
+
+<script>
+    // Cargar estado de favoritos al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        const botonesFavoritos = document.querySelectorAll('.favorito-btn');
+        
+        botonesFavoritos.forEach(boton => {
+            const productoId = boton.getAttribute('data-producto-id');
+            verificarEstadoFavorito(productoId, boton);
+        });
+    });
+
+    function verificarEstadoFavorito(productoId, boton) {
+        fetch('/Favoritos/VerificarFavorito?productoId=' + productoId)
+            .then(response => response.json())
+            .then(data => {
+                const icon = boton.querySelector('.favorito-icon');
+                if (data.esFavorito) {
+                    icon.textContent = '❤️';
+                    boton.style.borderColor = '#ff0000';
+                } else {
+                    icon.textContent = '🤍';
+                    boton.style.borderColor = '#ddd';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function toggleFavorito(productoId, boton) {
+        const icon = boton.querySelector('.favorito-icon');
+        const esFavorito = icon.textContent === '❤️';
+
+        if (esFavorito) {
+            // Eliminar de favoritos
+            fetch('/Favoritos/EliminarAjax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productoId: productoId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    icon.textContent = '🤍';
+                    boton.style.borderColor = '#ddd';
+                    
+                    // Actualizar contador en header
+                    if (typeof actualizarContadorFavoritos === 'function') {
+                        actualizarContadorFavoritos();
+                    }
+                    
+                    mostrarMensajeTemporal('Eliminado de favoritos', 'info');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar de favoritos');
+            });
+        } else {
+            // Agregar a favoritos
+            fetch('/Favoritos/Agregar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productoId: productoId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    icon.textContent = '❤️';
+                    boton.style.borderColor = '#ff0000';
+                    
+                    // Actualizar contador en header
+                    if (typeof actualizarContadorFavoritos === 'function') {
+                        actualizarContadorFavoritos();
+                    }
+                    
+                    mostrarMensajeTemporal('Agregado a favoritos ❤️', 'success');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al agregar a favoritos');
+            });
+        }
+    }
+
+    function mostrarMensajeTemporal(mensaje, tipo) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText = 'top: 80px; right: 20px; z-index: 9999; min-width: 300px;';
+        alertDiv.innerHTML = `
+            ${mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        document.body.appendChild(alertDiv);
+        
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 2000);
+    }
+</script>

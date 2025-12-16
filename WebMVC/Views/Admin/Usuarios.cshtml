@@ -1,0 +1,186 @@
+@using WebMVC.Controllers
+@model IList<AdminUsuarioViewModel>
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Gestión de Usuarios</h1>
+        <a asp-action="Index" class="btn btn-outline-secondary">← Volver al Dashboard</a>
+    </div>
+
+    <!-- Búsqueda -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-action="Usuarios" class="d-flex gap-2">
+                <input type="text" name="buscar" class="form-control" placeholder="Buscar por nombre o email..." value="@ViewBag.BusquedaTerm">
+                <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+                @if (!string.IsNullOrEmpty(ViewBag.BusquedaTerm))
+                {
+                    <a asp-action="Usuarios" class="btn btn-outline-secondary">Limpiar</a>
+                }
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla de usuarios -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Rol</th>
+                    <th>Pedidos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            @if (string.IsNullOrEmpty(ViewBag.BusquedaTerm))
+                            {
+                                <span>No hay usuarios registrados</span>
+                            }
+                            else
+                            {
+                                <span>No se encontraron usuarios que coincidan con la búsqueda</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var usuario in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@usuario.Nombre</strong>
+                            </td>
+                            <td>
+                                @usuario.Email
+                            </td>
+                            <td>
+                                @(string.IsNullOrEmpty(usuario.Telefono) ? "—" : usuario.Telefono)
+                            </td>
+                            <td>
+                                <span class="badge @(usuario.Rol.ToLower() == "admin" ? "bg-danger" : "bg-success")">
+                                    @usuario.Rol
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-info">@usuario.NumPedidos</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#detallesModal" 
+                                            onclick="mostrarDetalles('@usuario.Nombre', '@usuario.Email', '@usuario.Telefono', '@usuario.Rol', @usuario.NumPedidos)">
+                                        👁️ Ver
+                                    </button>
+                                    @if (usuario.Rol.ToLower() == "admin")
+                                    {
+                                        <button type="button" class="btn btn-outline-warning" onclick="cambiarRol(@usuario.Id, 'Cliente')">
+                                            👤 Cliente
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-outline-danger" onclick="cambiarRol(@usuario.Id, 'Admin')">
+                                            👑 Admin
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert alert-info mt-4">
+        <strong>Total de usuarios:</strong> @Model.Count
+    </div>
+</div>
+
+<!-- Modal de detalles -->
+<div class="modal fade" id="detallesModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nombre:</strong></label>
+                    <p id="detalle-nombre"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Email:</strong></label>
+                    <p id="detalle-email"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Teléfono:</strong></label>
+                    <p id="detalle-telefono"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Rol:</strong></label>
+                    <p id="detalle-rol"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><strong>Pedidos realizados:</strong></label>
+                    <p id="detalle-pedidos"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function mostrarDetalles(nombre, email, telefono, rol, numPedidos) {
+            document.getElementById('detalle-nombre').textContent = nombre;
+            document.getElementById('detalle-email').textContent = email;
+            document.getElementById('detalle-telefono').textContent = telefono || '—';
+            document.getElementById('detalle-rol').innerHTML = `<span class="badge ${rol.toLowerCase() === 'admin' ? 'bg-danger' : 'bg-success'}">${rol}</span>`;
+            document.getElementById('detalle-pedidos').textContent = numPedidos;
+        }
+
+        function cambiarRol(usuarioId, nuevoRol) {
+            if (!confirm(`¿Cambiar rol a "${nuevoRol}"?`)) return;
+
+            fetch('/Admin/CambiarRol', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    usuarioId: usuarioId,
+                    nuevoRol: nuevoRol
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Rol actualizado correctamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cambiar el rol');
+            });
+        }
+    </script>
+}

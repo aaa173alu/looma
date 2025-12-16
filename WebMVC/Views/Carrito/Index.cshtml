@@ -1,0 +1,227 @@
+@model ApplicationCore.Domain.EN.Carrito
+
+@{
+    ViewData["Title"] = "Mi Carrito";
+    var itemsConDetalles = ViewBag.ItemsConDetalles as List<(ApplicationCore.Domain.EN.ItemPedido Item, ApplicationCore.Domain.EN.Producto Producto)>;
+    var total = ViewBag.Total as decimal? ?? 0;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>🛒 Mi Carrito de Compras</h1>
+        <a asp-controller="Tienda" asp-action="Index" class="btn btn-outline-secondary">
+            ← Continuar comprando
+        </a>
+    </div>
+
+    @if (Model.Items == null || !Model.Items.Any())
+    {
+        <div class="alert alert-info text-center p-5">
+            <h3>Tu carrito está vacío</h3>
+            <p class="mb-4">¿Por qué no agregas algunos productos?</p>
+            <a asp-controller="Tienda" asp-action="Index" class="btn btn-primary btn-lg">
+                Ver catálogo de productos
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th style="width: 150px;">Cantidad</th>
+                                        <th>Subtotal</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in itemsConDetalles)
+                                    {
+                                        var producto = item.Producto;
+                                        var itemPedido = item.Item;
+                                        var subtotal = producto.Precio * itemPedido.Cantidad;
+
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-3" style="font-size: 3rem;">👟</div>
+                                                    <div>
+                                                        <h6 class="mb-0">@producto.Nombre</h6>
+                                                        <small class="text-muted">
+                                                            Color: @producto.Color
+                                                            @if (!string.IsNullOrEmpty(itemPedido.Talla))
+                                                            {
+                                                                <span>| Talla: @itemPedido.Talla</span>
+                                                            }
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <strong>@producto.Precio.ToString("C")</strong>
+                                            </td>
+                                            <td>
+                                                <div class="input-group input-group-sm">
+                                                    <button class="btn btn-outline-secondary btn-cantidad" 
+                                                            type="button" 
+                                                            data-producto-id="@producto.Id"
+                                                            data-action="decrease">
+                                                        -
+                                                    </button>
+                                                    <input type="number" 
+                                                           class="form-control text-center cantidad-input" 
+                                                           value="@itemPedido.Cantidad" 
+                                                           min="1" 
+                                                           max="@producto.Stock"
+                                                           data-producto-id="@producto.Id"
+                                                           readonly>
+                                                    <button class="btn btn-outline-secondary btn-cantidad" 
+                                                            type="button" 
+                                                            data-producto-id="@producto.Id"
+                                                            data-action="increase"
+                                                            @(itemPedido.Cantidad >= producto.Stock ? "disabled" : "")>
+                                                        +
+                                                    </button>
+                                                </div>
+                                                <small class="text-muted d-block mt-1">Stock: @producto.Stock</small>
+                                            </td>
+                                            <td>
+                                                <strong class="subtotal-@itemPedido.Id">@subtotal.ToString("C")</strong>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-danger btn-eliminar" 
+                                                        data-producto-id="@producto.Id">
+                                                    🗑️
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="Vaciar" method="post" onsubmit="return confirm('¿Estás seguro de vaciar todo el carrito?');">
+                    <button type="submit" class="btn btn-outline-danger">
+                        🗑️ Vaciar carrito
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Resumen del pedido</h5>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="subtotal-amount">@total.ToString("C")</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Envío:</span>
+                            <span class="text-muted">A calcular</span>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Total:</strong>
+                            <strong class="text-primary" id="total-amount">@total.ToString("C")</strong>
+                        </div>
+
+                        <a href="/Checkout/Index" class="btn btn-primary btn-lg w-100 mb-2">
+                            💳 Proceder al pago
+                        </a>
+                        
+                        <a asp-controller="Tienda" asp-action="Index" class="btn btn-outline-secondary w-100">
+                            Seguir comprando
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title">🚚 Envío gratis</h6>
+                        <p class="card-text small text-muted mb-0">
+                            En pedidos superiores a $50.00
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Actualizar cantidad
+        document.querySelectorAll('.btn-cantidad').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productoId = this.dataset.productoId;
+                const action = this.dataset.action;
+                const input = document.querySelector(`input[data-producto-id="${productoId}"]`);
+                let cantidad = parseInt(input.value);
+
+                if (action === 'increase') {
+                    cantidad++;
+                } else if (action === 'decrease' && cantidad > 1) {
+                    cantidad--;
+                }
+
+                actualizarCantidad(productoId, cantidad);
+            });
+        });
+
+        function actualizarCantidad(productoId, cantidad) {
+            fetch('/Carrito/ActualizarCantidad', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productoId: parseInt(productoId), cantidad: cantidad })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Recargar para actualizar totales
+                } else {
+                    alert('Error al actualizar la cantidad');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al actualizar la cantidad');
+            });
+        }
+
+        // Eliminar producto
+        document.querySelectorAll('.btn-eliminar').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (confirm('¿Eliminar este producto del carrito?')) {
+                    const productoId = this.dataset.productoId;
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/Carrito/Eliminar';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'productoId';
+                    input.value = productoId;
+                    
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    </script>
+}

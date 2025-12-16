@@ -1,0 +1,48 @@
+@model ApplicationCore.Domain.EN.Producto
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<h1>Detalles del Zapato</h1>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Nombre:</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+
+            <dt class="col-sm-3">Descripción:</dt>
+            <dd class="col-sm-9">@Model.Descripcion</dd>
+
+            <dt class="col-sm-3">Precio:</dt>
+            <dd class="col-sm-9">$@Model.Precio</dd>
+
+            <dt class="col-sm-3">Stock:</dt>
+            <dd class="col-sm-9">@Model.Stock unidades</dd>
+
+            <dt class="col-sm-3">Color:</dt>
+            <dd class="col-sm-9">@Model.Color</dd>
+
+            <dt class="col-sm-3">Destacado:</dt>
+            <dd class="col-sm-9">@(Model.Destacado ? "Sí ⭐" : "No")</dd>
+
+            <dt class="col-sm-3">Tallas Disponibles:</dt>
+            <dd class="col-sm-9">
+                @if (Model.TallasDisponibles != null && Model.TallasDisponibles.Any())
+                {
+                    @string.Join(", ", Model.TallasDisponibles)
+                }
+                else
+                {
+                    <span class="text-muted">Sin tallas configuradas</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver al Listado</a>
+</div>

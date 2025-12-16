@@ -1,0 +1,179 @@
+@{
+    ViewData["Title"] = "Ayuda";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h1 class="mb-4">❓ Centro de Ayuda</h1>
+
+            <p class="lead mb-4">Encuentra respuestas a las preguntas más frecuentes</p>
+
+            <div class="accordion" id="faqAccordion">
+                <!-- Pregunta 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading1">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                            ¿Cómo puedo realizar un pedido?
+                        </button>
+                    </h2>
+                    <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Para realizar un pedido, sigue estos pasos:</p>
+                            <ol>
+                                <li>Navega por nuestro catálogo de productos</li>
+                                <li>Selecciona el producto que te interesa y haz clic en "Ver detalles"</li>
+                                <li>Elige la talla y cantidad deseada</li>
+                                <li>Haz clic en "Añadir al carrito"</li>
+                                <li>Accede a tu carrito haciendo clic en el icono 🛒</li>
+                                <li>Revisa tu pedido y haz clic en "Proceder al pago"</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregunta 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                            ¿Cómo puedo modificar mi perfil?
+                        </button>
+                    </h2>
+                    <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Para modificar tu perfil:</p>
+                            <ol>
+                                <li>Haz clic en el icono de cuenta 👤 en la parte superior derecha</li>
+                                <li>Selecciona "Editar Perfil"</li>
+                                <li>Actualiza tu información personal (nombre, email, teléfono)</li>
+                                <li>Si deseas cambiar tu contraseña, completa los campos correspondientes</li>
+                                <li>Haz clic en "Guardar cambios"</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregunta 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                            ¿Qué métodos de pago aceptan?
+                        </button>
+                    </h2>
+                    <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Aceptamos los siguientes métodos de pago:</p>
+                            <ul>
+                                <li>Tarjetas de crédito (Visa, Mastercard, American Express)</li>
+                                <li>Tarjetas de débito</li>
+                                <li>PayPal</li>
+                                <li>Transferencia bancaria</li>
+                                <li>Pago contra reembolso (en pedidos superiores a 30€)</li>
+                            </ul>
+                            <p class="mb-0">Todos los pagos se procesan de forma segura a través de pasarelas de pago certificadas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregunta 4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                            ¿Cuánto tarda el envío?
+                        </button>
+                    </h2>
+                    <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Los plazos de envío varían según tu ubicación:</p>
+                            <ul>
+                                <li><strong>Península:</strong> 2-3 días laborables</li>
+                                <li><strong>Baleares y Canarias:</strong> 4-7 días laborables</li>
+                                <li><strong>Envío internacional:</strong> 7-15 días laborables</li>
+                            </ul>
+                            <p class="mb-0">El envío es gratuito para pedidos superiores a 50€.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregunta 5 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading5">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
+                            ¿Puedo devolver un producto?
+                        </button>
+                    </h2>
+                    <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Sí, aceptamos devoluciones bajo las siguientes condiciones:</p>
+                            <ul>
+                                <li>Tienes 30 días desde la recepción del pedido</li>
+                                <li>El producto debe estar sin usar y en su embalaje original</li>
+                                <li>Los zapatos deben conservar todas las etiquetas</li>
+                                <li>Los productos personalizados no admiten devolución</li>
+                            </ul>
+                            <p class="mb-0">El reembolso se realizará en un plazo de 7-14 días laborables tras recibir y verificar el producto devuelto.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregunta 6 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading6">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
+                            ¿Cómo puedo saber mi talla?
+                        </button>
+                    </h2>
+                    <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Para elegir la talla correcta:</p>
+                            <ol>
+                                <li>Mide tu pie por la tarde (cuando está más hinchado)</li>
+                                <li>Mide desde el talón hasta el dedo más largo</li>
+                                <li>Consulta nuestra tabla de tallas en cada producto</li>
+                                <li>Si estás entre dos tallas, te recomendamos elegir la mayor</li>
+                            </ol>
+                            <p class="mb-0">Si tienes dudas, contacta con nuestro servicio de atención al cliente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pregunta 7 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading7">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7">
+                            ¿Olvidé mi contraseña, qué hago?
+                        </button>
+                    </h2>
+                    <div id="collapse7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>Para recuperar tu contraseña:</p>
+                            <ol>
+                                <li>Ve a la página de inicio de sesión</li>
+                                <li>Haz clic en "¿Olvidaste tu contraseña?"</li>
+                                <li>Introduce tu correo electrónico</li>
+                                <li>Recibirás un enlace para restablecer tu contraseña</li>
+                            </ol>
+                            <p class="mb-0">Si no recibes el correo, revisa tu carpeta de spam o contacta con soporte.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4 bg-light">
+                <div class="card-body text-center">
+                    <h5>¿No encuentras lo que buscas?</h5>
+                    <p class="mb-3">Contacta con nuestro equipo de soporte</p>
+                    <a asp-action="Contacto" class="btn btn-primary">
+                        📧 Ir a Contacto
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    ← Volver a Mi Cuenta
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

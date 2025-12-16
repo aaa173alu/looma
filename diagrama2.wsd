@@ -1,0 +1,210 @@
+@startuml Diagrama 
+skinparam classAttributeIconSize 0
+title Diagrama de Clases - Logica de Negocio
+
+' ===== CLASES PRINCIPALES =====
+
+class Usuario {
+    - idUsuario : int
+    - nombre : String
+    - email : String
+    - contrasenya : String
+    - telefono : String
+    - direccion : String
+    - rol : String
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+    +registrar(): boolean
+    +iniciarSesion(): boolean
+    +cerrarSesion(): void
+}
+
+class Administrador {
+    - nombreUsuario : String
+    - contrasenya : String
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+    +crearProducto(): void
+    +editarProducto(): void
+}
+
+enum EstadoPedido {
+    carrito
+    realizado
+    comprado
+    rechazado
+    recibido
+    validado
+}
+
+class Producto {
+    - idProducto : int
+    - nombre : String
+    - descripcion : String
+    - precio : float
+    - tallasDisponibles : List<String>
+    - fotos : List<String>
+    - stock : int
+    - destacado : boolean
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+    +mostrarDetalles(): void
+}
+
+class ItemPedido {
+    - producto : Producto
+    - cantidad : int
+    - talla : String
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+}
+
+class Pedido {
+    - idPedido : int
+    - fecha : Date
+    - total : float
+    - direccionEnvio : String
+    - estado : EstadoPedido
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+    +calcularTotal(): float
+    +finalizarCompra(): void
+}
+
+class Ajustes {
+    - idAjustes : int
+    - tema : String
+    - notificaciones : boolean
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+}
+
+class Favoritos {
+    - idFavoritos : int
+    - fechaCreacion : Date
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+}
+
+class Valoracion {
+    - idValoracion : int
+    - valoracion : int
+    - comentario : String
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+}
+
+' ===== CLASES ADICIONALES DE LA PRACTICA =====
+
+class Sesion {
+    - idSesion : int
+    - fechaInicio : Date
+    - fechaFin : Date
+    - activa : boolean
+    +iniciarSesion(): boolean
+    +cerrarSesion(): void
+    +mantenerSesion(): void
+}
+
+class Categoria {
+    - idCategoria : int
+    - nombre : String
+    +crear(): long
+    +modificar(): void
+    +borrar(): void
+    +buscar(): void
+}
+
+class Pago {
+    - idPago : int
+    - metodoPago : String
+    - fechaPago : Date
+    - monto : float
+    +realizarPago(): boolean
+    +validarPago(): boolean
+}
+
+class Ayuda {
+    - idAyuda : int
+    - pregunta : String
+    - respuesta : String
+    +buscarRespuesta(): String
+    +contactarSoporte(): void
+}
+
+class Perfil {
+    - idPerfil : int
+    - nombre : String
+    - email : String
+    - contrasenya : String
+    - telefono : String
+    +editarNombre(): void
+    +editarEmail(): void
+    +editarContrasenya(): void
+    +editarTelefono(): void
+}
+
+class Carrito {
+    - idCarrito : int
+    - total : float
+    - fechaCreacion : Date
+    +agregarProducto(): void
+    +eliminarProducto(): void
+    +modificarCantidad(): void
+    +calcularTotal(): float
+    +guardarCarrito(): void
+}
+
+' ===== RELACIONES ENTRE CLASES =====
+Valoracion "*" --> "1" Usuario : valora >
+Valoracion "*" --> "1" Producto : valorado >
+Usuario "1" --> "*" Favoritos : gestiona >
+ItemPedido "*" --> "1" Producto : referencia >
+Usuario "1" --> "*" Pedido : realiza >
+Pedido "1" *--> "*" ItemPedido : incluye >
+Usuario --> Ajustes : <<configura>>
+Favoritos "*" --> "1" Producto : contiene >
+Ajustes "1" --> "1" Usuario
+Usuario "0" --> "1" Ajustes
+
+' ===== NUEVAS RELACIONES ANADIDAS =====
+Usuario "1" --> "1" Sesion : tiene >
+Usuario "1" --> "1" Perfil : posee >
+Usuario "1" --> "*" Ayuda : consulta >
+Categoria "1..*" --> "1" Producto : contiene >
+Pedido "1" --> "0.1" Pago : procesa >
+Usuario "1" --> "1" Carrito : posee >
+Carrito "*" --> "*" ItemPedido : contiene >
+
+' ===== ROLES =====
+Pedido --> Usuario : usuarioId
+ItemPedido --> Producto : productoId
+ItemPedido --> Pedido : pedidoId
+Valoracion --> Usuario : usuarioId
+Valoracion --> Producto : productoId
+Favoritos --> Usuario : usuarioId
+Favoritos --> Producto : productoId
+Ajustes --> Usuario : usuarioId
+Sesion --> Usuario : usuarioId
+Perfil --> Usuario : usuarioId
+Ayuda --> Usuario : usuarioId
+Carrito --> Usuario : usuarioId
+Pago --> Pedido : pedidoId
+
+@enduml

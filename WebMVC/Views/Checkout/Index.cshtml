@@ -1,0 +1,233 @@
+@{
+    ViewData["Title"] = "Finalizar Compra - Datos de Envío";
+    var usuario = ViewBag.Usuario as ApplicationCore.Domain.EN.Usuario;
+    var itemsConDetalles = ViewBag.ItemsConDetalles as List<(ApplicationCore.Domain.EN.ItemPedido Item, ApplicationCore.Domain.EN.Producto Producto)>;
+    var total = ViewBag.Total as decimal?;
+    var nombreEnvio = ViewBag.NombreEnvio as string;
+    var direccionEnvio = ViewBag.DireccionEnvio as string;
+    var telefonoEnvio = ViewBag.TelefonoEnvio as string;
+    var emailEnvio = ViewBag.EmailEnvio as string;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Formulario de envío -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">📦 Paso 1: Datos de Envío</h4>
+                </div>
+                <div class="card-body">
+                    <form id="form-envio">
+                        <!-- Opciones de envío -->
+                        <div class="mb-4">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="tipoEnvio" id="usar-mis-datos" value="mis-datos" checked onclick="seleccionarOpcionEnvio('mis-datos')">
+                                <label class="form-check-label fw-bold" for="usar-mis-datos">
+                                    ✓ Usar mis datos predeterminados
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoEnvio" id="usar-otra-direccion" value="otra-direccion" onclick="seleccionarOpcionEnvio('otra-direccion')">
+                                <label class="form-check-label fw-bold" for="usar-otra-direccion">
+                                    📝 Usar otra dirección
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Campos del formulario -->
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="nombre" class="form-label">Nombre completo *</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="@nombreEnvio" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="direccion" class="form-label">Dirección de envío *</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion" value="@direccionEnvio" placeholder="Calle, número, piso, puerta" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="telefono" class="form-label">Teléfono *</label>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" value="@telefonoEnvio" placeholder="+34 600 000 000" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" value="@emailEnvio" placeholder="correo@ejemplo.com" required>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-4">
+                            <small><strong>💡 Información:</strong> Si seleccionas "Usar mis datos", se enviarán a la dirección registrada en tu perfil. Si la cambias aquí, solo se usará para este pedido.</small>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg" id="btn-continuar">
+                                Continuar al Pago →
+                            </button>
+                            <a href="@Url.Action("Index", "Carrito")" class="btn btn-outline-secondary">
+                                ← Volver al Carrito
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen del pedido -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">📋 Resumen del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    @if (itemsConDetalles != null && itemsConDetalles.Count > 0)
+                    {
+                        <div class="list-group list-group-flush mb-3">
+                            @foreach (var (item, producto) in itemsConDetalles)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="me-2">
+                                            <h6 class="mb-1">@producto.Nombre</h6>
+                                            <small class="text-muted">
+                                                Cantidad: @item.Cantidad
+                                                @if (!string.IsNullOrEmpty(item.Talla))
+                                                {
+                                                    <span>| Talla: @item.Talla</span>
+                                                }
+                                            </small>
+                                        </div>
+                                        <span class="badge bg-secondary">@((producto.Precio * item.Cantidad).ToString("C"))</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Subtotal:</span>
+                        <strong>@total?.ToString("C")</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Envío:</span>
+                        <strong class="text-success">GRATIS</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Total:</h5>
+                        <h5 class="mb-0 text-primary">@total?.ToString("C")</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let camposDeshabilitados = true;
+
+        function seleccionarOpcionEnvio(tipo) {
+            const campos = ['nombre', 'direccion', 'telefono', 'email'];
+            
+            if (tipo === 'mis-datos') {
+                // Deshabilitar campos y usar datos del usuario
+                campos.forEach(campo => {
+                    document.getElementById(campo).disabled = true;
+                });
+                camposDeshabilitados = true;
+                
+                // Restaurar valores originales del usuario
+                @if (usuario != null)
+                {
+                    <text>
+                    document.getElementById('nombre').value = '@(nombreEnvio ?? usuario.Nombre)';
+                    document.getElementById('direccion').value = '@(direccionEnvio ?? usuario.Direccion)';
+                    document.getElementById('telefono').value = '@(telefonoEnvio ?? usuario.Telefono)';
+                    document.getElementById('email').value = '@(emailEnvio ?? usuario.Email)';
+                    </text>
+                }
+            } else {
+                // Habilitar campos para edición
+                campos.forEach(campo => {
+                    document.getElementById(campo).disabled = false;
+                });
+                camposDeshabilitados = false;
+            }
+        }
+
+        // Inicializar con la opción por defecto
+        seleccionarOpcionEnvio('mis-datos');
+
+        document.getElementById('form-envio').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const tipoEnvio = document.querySelector('input[name="tipoEnvio"]:checked').value;
+            const nombre = document.getElementById('nombre').value;
+            const direccion = document.getElementById('direccion').value;
+            const telefono = document.getElementById('telefono').value;
+            const email = document.getElementById('email').value;
+
+            // Validar campos
+            if (!direccion || direccion.trim() === '') {
+                mostrarMensaje('⚠️ Por favor completa la dirección de envío', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('btn-continuar');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Guardando...';
+
+            // Guardar datos en el servidor
+            fetch('/Checkout/DatosEnvio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tipoEnvio: tipoEnvio,
+                    nombre: nombre,
+                    direccion: direccion,
+                    telefono: telefono,
+                    email: email
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/Checkout/Pago';
+                } else {
+                    mostrarMensaje('❌ Error: ' + data.message, 'danger');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Continuar al Pago →';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarMensaje('❌ Error al guardar los datos', 'danger');
+                btn.disabled = false;
+                btn.innerHTML = 'Continuar al Pago →';
+            });
+        });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
+            alertDiv.innerHTML = `
+                <strong>${mensaje}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 150);
+            }, 3000);
+        }
+    </script>
+}

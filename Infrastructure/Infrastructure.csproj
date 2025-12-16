@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NHibernate" Version="5.4.11" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NHibernate\**\*.xml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="NHibernate\**\*.hbm.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

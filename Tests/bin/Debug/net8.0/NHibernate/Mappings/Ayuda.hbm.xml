@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Infrastructure" namespace="ApplicationCore.Domain.EN">
+  <class name="Ayuda" table="Ayuda">
+    <id name="Id" column="Id" type="long">
+      <generator class="hilo">
+        <param name="table">NHibernateUniqueKey</param>
+        <param name="column">NextHigh</param>
+        <param name="max_lo">100</param>
+      </generator>
+    </id>
+    <property name="Pregunta" column="Pregunta" />
+    <property name="Respuesta" column="Respuesta" />
+    <property name="UsuarioId" column="UsuarioId" />
+  </class>
+</hibernate-mapping>

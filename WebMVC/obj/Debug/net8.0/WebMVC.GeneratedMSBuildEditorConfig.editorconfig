@@ -1,0 +1,155 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = WebMVC
+build_property.RootNamespace = WebMVC
+build_property.ProjectDir = C:\Users\makin\Desktop\universidad\dsm\Prácticas\prac\WebMVC\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\makin\Desktop\universidad\dsm\Prácticas\prac\WebMVC
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Admin/Pedidos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUGVkaWRvcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Admin/Reportes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUmVwb3J0ZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Admin/Usuarios.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXN1YXJpb3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Carrito/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fycml0b1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Checkout/Confirmacion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcQ29uZmlybWFjaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Checkout/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Checkout/Pago.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcUGFnby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/Ayuda.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXEF5dWRhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/CerrarSesion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXENlcnJhclNlc2lvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/Contacto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXENvbnRhY3RvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/DatosEnvio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXERhdG9zRW52aW8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/EditarPerfil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXEVkaXRhclBlcmZpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/EliminarCuenta.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXEVsaW1pbmFyQ3VlbnRhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Cuenta/Tarjetas.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXFRhcmpldGFzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Favoritos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmF2b3JpdG9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Pedido/MisPedidos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVkaWRvXE1pc1BlZGlkb3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Pedido/Seguimiento.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVkaWRvXFNlZ3VpbWllbnRvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Productos/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdG9zXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Productos/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdG9zXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Productos/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdG9zXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Productos/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdG9zXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Productos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdG9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Tienda/Detalle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGllbmRhXERldGFsbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Tienda/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGllbmRhXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/makin/Desktop/universidad/dsm/Prácticas/prac/WebMVC/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-giswp39xn8

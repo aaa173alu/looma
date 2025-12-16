@@ -1,0 +1,128 @@
+@using WebMVC.Controllers
+@model ReportesViewModel
+
+@{
+    ViewData["Title"] = "Reportes y Análisis";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Reportes y Análisis</h1>
+        <a asp-action="Index" class="btn btn-outline-secondary">← Volver al Dashboard</a>
+    </div>
+
+    <!-- Ventas por mes -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">📊 Ventas por Mes (Últimos 6 meses)</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.VentasPorMes.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mes</th>
+                                <th class="text-end">Total Ventas</th>
+                                <th class="text-end">Número de Pedidos</th>
+                                <th class="text-end">Promedio por Pedido</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var venta in Model.VentasPorMes)
+                            {
+                                var promedio = venta.NumPedidos > 0 ? venta.Total / venta.NumPedidos : 0;
+                                <tr>
+                                    <td><strong>@venta.NombreMes</strong></td>
+                                    <td class="text-end">
+                                        <span class="badge bg-success" style="font-size: 1rem;">
+                                            @venta.Total.ToString("C")
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge bg-info" style="font-size: 1rem;">
+                                            @venta.NumPedidos
+                                        </span>
+                                    </td>
+                                    <td class="text-end">@promedio.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <th>TOTAL</th>
+                                <th class="text-end">@Model.VentasPorMes.Sum(v => v.Total).ToString("C")</th>
+                                <th class="text-end">@Model.VentasPorMes.Sum(v => v.NumPedidos)</th>
+                                <th class="text-end">
+                                    @{
+                                        var totalPedidos = Model.VentasPorMes.Sum(v => v.NumPedidos);
+                                        var promedioTotal = totalPedidos > 0 
+                                            ? Model.VentasPorMes.Sum(v => v.Total) / totalPedidos 
+                                            : 0;
+                                    }
+                                    @promedioTotal.ToString("C")
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Gráfica simple con barras CSS -->
+                <div class="mt-4">
+                    <h6 class="mb-3">Visualización de Ventas</h6>
+                    @{
+                        var maxVenta = Model.VentasPorMes.Any() ? Model.VentasPorMes.Max(v => v.Total) : 1;
+                    }
+                    @foreach (var venta in Model.VentasPorMes.OrderBy(v => v.Año).ThenBy(v => v.Mes))
+                    {
+                        var porcentaje = maxVenta > 0 ? (venta.Total / maxVenta) * 100 : 0;
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small><strong>@venta.NombreMes</strong></small>
+                                <small>@venta.Total.ToString("C")</small>
+                            </div>
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: @porcentaje%;" 
+                                     aria-valuenow="@venta.Total" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="@maxVenta">
+                                    @venta.NumPedidos pedidos
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No hay datos de ventas para mostrar.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Resumen rápido -->
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">💰 Ingresos Totales</h5>
+                    <h2 class="text-success">@Model.VentasPorMes.Sum(v => v.Total).ToString("C")</h2>
+                    <p class="text-muted mb-0">Últimos 6 meses</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Pedidos Totales</h5>
+                    <h2 class="text-primary">@Model.VentasPorMes.Sum(v => v.NumPedidos)</h2>
+                    <p class="text-muted mb-0">Últimos 6 meses</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

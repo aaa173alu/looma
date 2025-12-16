@@ -1,0 +1,58 @@
+@model ApplicationCore.Domain.EN.Usuario
+@{
+    ViewData["Title"] = "Datos de Envío";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="mb-4">📦 Datos de Envío Predeterminados</h1>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form asp-action="GuardarDatosEnvio" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre completo</label>
+                            <input class="form-control" name="nombreEnvio" value="@Model.NombreEnvio" placeholder="Nombre para el envío">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dirección</label>
+                            <input class="form-control" name="direccionEnvio" value="@Model.DireccionEnvio" placeholder="Calle, número, piso">
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Ciudad</label>
+                                <input class="form-control" name="ciudadEnvio" value="@Model.CiudadEnvio" placeholder="Ciudad">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Código Postal</label>
+                                <input class="form-control" name="cpEnvio" value="@Model.CPEnvio" placeholder="00000">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono de contacto</label>
+                            <input class="form-control" name="telefonoEnvio" value="@Model.TelefonoEnvio" placeholder="+34 600 000 000">
+                        </div>
+
+                        <div class="alert alert-info">
+                            <small>Estos datos se usarán como predeterminados en el checkout (Paso 1). Puedes cambiarlos en cada compra si lo necesitas.</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">← Volver a mi cuenta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

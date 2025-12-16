@@ -1,0 +1,108 @@
+@model IEnumerable<ApplicationCore.Domain.EN.Tarjeta>
+@{
+    ViewData["Title"] = "Tarjetas guardadas";
+    long? predeterminada = ViewBag.Predeterminada as long?;
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1 class="mb-4">💳 Tarjetas guardadas</h1>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="mb-3">Añadir nueva tarjeta</h5>
+                    <form asp-action="AgregarTarjeta" method="post" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Número de tarjeta</label>
+                            <input class="form-control" name="numeroTarjeta" placeholder="4532 1488 0343 6467" required maxlength="19">
+                            <small class="text-muted">Se guardará en formato enmascarado</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Mes (MM)</label>
+                            <input class="form-control" name="mesExp" type="number" min="1" max="12" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Año (YYYY)</label>
+                            <input class="form-control" name="anioExp" type="number" min="2024" max="2050" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre del titular</label>
+                            <input class="form-control" name="nombreTitular" required placeholder="Nombre como aparece en la tarjeta">
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="esPredeterminada" id="esPredeterminada">
+                                <label class="form-check-label" for="esPredeterminada">Usar como predeterminada</label>
+                            </div>
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button type="submit" class="btn btn-primary">Guardar tarjeta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-3">Mis tarjetas</h5>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var t in Model)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-bold">@t.Marca @t.NumeroEnmascarado</div>
+                                        <small class="text-muted">Exp: @t.MesExp/@t.AnioExp | Titular: @t.NombreTitular</small>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        @if (predeterminada == t.Id)
+                                        {
+                                            <span class="badge bg-success">Predeterminada</span>
+                                        }
+                                        else
+                                        {
+                                            <form asp-action="PredeterminadaTarjeta" method="post" class="d-inline">
+                                                <input type="hidden" name="tarjetaId" value="@t.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-success">Marcar predeterminada</button>
+                                            </form>
+                                        }
+                                        <form asp-action="EliminarTarjeta" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar esta tarjeta?');">
+                                            <input type="hidden" name="tarjetaId" value="@t.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Aún no tienes tarjetas guardadas.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary">← Volver a mi cuenta</a>
+            </div>
+        </div>
+    </div>
+</div>
