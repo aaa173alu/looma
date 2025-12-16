@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nEBsRlSyUKRJ6y/ZoK2GgaL2kSSYHgvXvv/9VD49WXg=",
+  "Hash": "AuvqSgKLqFxovFH+BpzFYJWsm0PJXUrHD1cS3ZoiHFc=",
   "Source": "WebMVC",
   "BasePath": "_content/WebMVC",
   "Mode": "Default",
@@ -131,12 +131,12 @@
       "OriginalItemSpec": "wwwroot\\images\\logo.svg"
     },
     {
-      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_1f146dccc1864ad3a83c74174b7c5d5f.png",
+      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_24ebfbd406484c3d954b98dec97f0e5e.png",
       "SourceId": "WebMVC",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\",
       "BasePath": "_content/WebMVC",
-      "RelativePath": "images/productos/prod_1f146dccc1864ad3a83c74174b7c5d5f.png",
+      "RelativePath": "images/productos/prod_24ebfbd406484c3d954b98dec97f0e5e.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -147,15 +147,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_1f146dccc1864ad3a83c74174b7c5d5f.png"
+      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_24ebfbd406484c3d954b98dec97f0e5e.png"
     },
     {
-      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_44e89286077c46bab9efba1540887d25.png",
+      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_3c00f639be9e4c7aa81b8876537d69a4.png",
       "SourceId": "WebMVC",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\",
       "BasePath": "_content/WebMVC",
-      "RelativePath": "images/productos/prod_44e89286077c46bab9efba1540887d25.png",
+      "RelativePath": "images/productos/prod_3c00f639be9e4c7aa81b8876537d69a4.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -166,15 +166,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_44e89286077c46bab9efba1540887d25.png"
+      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_3c00f639be9e4c7aa81b8876537d69a4.png"
     },
     {
-      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_58cd98fbcfe546f092271c0650b145c5.png",
+      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_45ef84f8ea0c4b829412e2ef07aafa87.png",
       "SourceId": "WebMVC",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\",
       "BasePath": "_content/WebMVC",
-      "RelativePath": "images/productos/prod_58cd98fbcfe546f092271c0650b145c5.png",
+      "RelativePath": "images/productos/prod_45ef84f8ea0c4b829412e2ef07aafa87.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -185,15 +185,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_58cd98fbcfe546f092271c0650b145c5.png"
+      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_45ef84f8ea0c4b829412e2ef07aafa87.png"
     },
     {
-      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_bdbbef1c3c7540eb86907ca52dff69ee.png",
+      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_e6af14d4e74e49cda4dc3cfb21fc443b.png",
       "SourceId": "WebMVC",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\",
       "BasePath": "_content/WebMVC",
-      "RelativePath": "images/productos/prod_bdbbef1c3c7540eb86907ca52dff69ee.png",
+      "RelativePath": "images/productos/prod_e6af14d4e74e49cda4dc3cfb21fc443b.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -204,15 +204,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_bdbbef1c3c7540eb86907ca52dff69ee.png"
+      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_e6af14d4e74e49cda4dc3cfb21fc443b.png"
     },
     {
-      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_c40c6c411e724cdd98a42da4758e9da9.png",
+      "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\images\\productos\\prod_e9eda5f46df542c68b4ae1a76f821b7e.png",
       "SourceId": "WebMVC",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\",
       "BasePath": "_content/WebMVC",
-      "RelativePath": "images/productos/prod_c40c6c411e724cdd98a42da4758e9da9.png",
+      "RelativePath": "images/productos/prod_e9eda5f46df542c68b4ae1a76f821b7e.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -223,7 +223,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_c40c6c411e724cdd98a42da4758e9da9.png"
+      "OriginalItemSpec": "wwwroot\\images\\productos\\prod_e9eda5f46df542c68b4ae1a76f821b7e.png"
     },
     {
       "Identity": "C:\\Users\\makin\\Desktop\\prac\\WebMVC\\wwwroot\\js\\site.js",

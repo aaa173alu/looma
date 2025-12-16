@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using ApplicationCore.Domain.CEN;
 using ApplicationCore.Domain.EN;
 using System;
@@ -14,18 +15,20 @@ namespace WebMVC.Controllers
     {
         private readonly ProductoCEN _productoCEN;
         private readonly CategoriaCEN _categoriaCEN;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductosController(ProductoCEN productoCEN, CategoriaCEN categoriaCEN)
+        public ProductosController(ProductoCEN productoCEN, CategoriaCEN categoriaCEN, IWebHostEnvironment env)
         {
             _productoCEN = productoCEN;
             _categoriaCEN = categoriaCEN;
+            _env = env;
         }
 
         // Verificar si el usuario es Admin
         private bool EsAdmin()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
-            return rol == "Admin";
+            return string.Equals(rol, "admin", StringComparison.OrdinalIgnoreCase);
         }
 
         // GET: Productos (con filtros HQL) - SOLO ADMIN
@@ -183,7 +186,8 @@ namespace WebMVC.Controllers
             if (!extensionesPermitidas.Contains(extension))
                 throw new Exception("Formato de imagen no permitido. Usa JPG, JPEG, PNG o WEBP.");
 
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "productos");
+            // Guardamos en la webroot del sitio que se está ejecutando (para evitar rutas incorrectas si se lanza desde otra carpeta)
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "images", "productos");
             if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
             var fileName = $"prod_{Guid.NewGuid():N}{extension}";
