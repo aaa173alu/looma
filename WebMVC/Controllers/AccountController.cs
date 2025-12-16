@@ -21,6 +21,12 @@ namespace WebMVC.Controllers
             return View();
         }
 
+        // GET: Account/Register
+        public IActionResult Register()
+        {
+            return View();
+        }
+
         // POST: Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -47,6 +53,40 @@ namespace WebMVC.Controllers
             {
                 System.Diagnostics.Debug.WriteLine($"Login error: {ex}");
                 ViewBag.Error = "Credenciales inválidas";
+                return View();
+            }
+        }
+
+        // POST: Account/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(string nombre, string email, string password, string passwordConfirm)
+        {
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                ViewBag.Error = "Completa todos los campos";
+                return View();
+            }
+
+            if (password != passwordConfirm)
+            {
+                ViewBag.Error = "Las contraseñas no coinciden";
+                return View();
+            }
+
+            try
+            {
+                var usuario = _usuarioCEN.Registrar(nombre, email, password);
+
+                HttpContext.Session.SetString("UsuarioId", usuario.Id.ToString());
+                HttpContext.Session.SetString("UsuarioNombre", usuario.Nombre);
+                HttpContext.Session.SetString("UsuarioRol", usuario.Rol ?? "Cliente");
+
+                return RedirectToAction("Index", "Tienda");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
                 return View();
             }
         }

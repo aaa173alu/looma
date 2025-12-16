@@ -12,7 +12,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                @if (Context.Session.GetString("UsuarioRol") == "Admin")
+                @{ var esAdmin = string.Equals(Context.Session.GetString("UsuarioRol"), "admin", StringComparison.OrdinalIgnoreCase); }
+                @if (esAdmin)
                 {
                     <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Index">
                         <img src="~/images/logo.png" alt="Loma" height="40" />
@@ -34,7 +35,7 @@
                     <ul class="navbar-nav">
                         @if (Context.Session.GetString("UsuarioNombre") != null)
                         {
-                            @if (Context.Session.GetString("UsuarioRol") != "Admin")
+                            @if (!esAdmin)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark position-relative" asp-controller="Carrito" asp-action="Index" title="Carrito">

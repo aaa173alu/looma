@@ -20,3 +20,15 @@ C:\Users\makin\Desktop\universidad\dsm\Prácticas\prac\ApplicationCore\obj\Debug
 C:\Users\makin\Desktop\universidad\dsm\Prácticas\prac\ApplicationCore\obj\Debug\net8.0\refint\ApplicationCore.dll
 C:\Users\makin\Desktop\universidad\dsm\Prácticas\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.pdb
 C:\Users\makin\Desktop\universidad\dsm\Prácticas\prac\ApplicationCore\obj\Debug\net8.0\ref\ApplicationCore.dll
+C:\Users\makin\Desktop\prac\ApplicationCore\bin\Debug\net8.0\ApplicationCore.deps.json
+C:\Users\makin\Desktop\prac\ApplicationCore\bin\Debug\net8.0\ApplicationCore.dll
+C:\Users\makin\Desktop\prac\ApplicationCore\bin\Debug\net8.0\ApplicationCore.pdb
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.AssemblyInfoInputs.cache
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.AssemblyInfo.cs
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.csproj.CoreCompileInputs.cache
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.sourcelink.json
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.dll
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\refint\ApplicationCore.dll
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ApplicationCore.pdb
+C:\Users\makin\Desktop\prac\ApplicationCore\obj\Debug\net8.0\ref\ApplicationCore.dll

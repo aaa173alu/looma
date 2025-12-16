@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "U2KbODkTRgc=",
+  "dgSpecHash": "qC9uux9ZHHo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\Infrastructure\\Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\makin\\Desktop\\prac\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\makin\\.nuget\\packages\\antlr3.runtime\\3.5.1\\antlr3.runtime.3.5.1.nupkg.sha512",
     "C:\\Users\\makin\\.nuget\\packages\\iesi.collections\\4.0.4\\iesi.collections.4.0.4.nupkg.sha512",

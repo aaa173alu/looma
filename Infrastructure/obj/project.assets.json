@@ -5749,11 +5749,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\makin\\Desktop\\prac\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\Infrastructure\\Infrastructure.csproj",
+      "projectPath": "C:\\Users\\makin\\Desktop\\prac\\Infrastructure\\Infrastructure.csproj",
       "packagesPath": "C:\\Users\\makin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\makin\\Desktop\\prac\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\makin\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -5768,8 +5768,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\ApplicationCore\\ApplicationCore.csproj": {
-              "projectPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\ApplicationCore\\ApplicationCore.csproj"
+            "C:\\Users\\makin\\Desktop\\prac\\ApplicationCore\\ApplicationCore.csproj": {
+              "projectPath": "C:\\Users\\makin\\Desktop\\prac\\ApplicationCore\\ApplicationCore.csproj"
             }
           }
         }
@@ -5814,7 +5814,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\.dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\makin\\Desktop\\prac\\.dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

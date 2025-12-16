@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\ApplicationCore\\ApplicationCore.csproj",
+      "projectUniqueName": "C:\\Users\\makin\\Desktop\\prac\\ApplicationCore\\ApplicationCore.csproj",
       "projectName": "ApplicationCore",
-      "projectPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\ApplicationCore\\ApplicationCore.csproj",
+      "projectPath": "C:\\Users\\makin\\Desktop\\prac\\ApplicationCore\\ApplicationCore.csproj",
       "packagesPath": "C:\\Users\\makin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\ApplicationCore\\obj\\",
+      "outputPath": "C:\\Users\\makin\\Desktop\\prac\\ApplicationCore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\makin\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -64,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\makin\\Desktop\\universidad\\dsm\\Prácticas\\prac\\.dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\makin\\Desktop\\prac\\.dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
