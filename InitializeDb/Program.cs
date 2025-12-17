@@ -21,25 +21,60 @@ class Program
 
         Console.WriteLine("Configurando NHibernate...");
         
-        // Crear base de datos si no existe
-        try
+        // Preferir LocalDB por defecto; permitir SQLEXPRESS sólo si se solicita
+        string connExpressMaster = "Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;TrustServerCertificate=True;";
+        string connExpress = "Server=localhost\\SQLEXPRESS;Database=TiendaZapatos;Trusted_Connection=True;TrustServerCertificate=True;";
+        string connLocalDbMaster = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;";
+        string connLocalDb = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TiendaZapatos;Integrated Security=True;";
+
+        bool preferExpress = string.Equals(Environment.GetEnvironmentVariable("PREFER_SQLEXPRESS"), "1", StringComparison.OrdinalIgnoreCase);
+        bool expressOk = false;
+
+        if (preferExpress)
         {
-            using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection("Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;TrustServerCertificate=True;"))
+            try
             {
-                conn.Open();
-                System.Data.SqlClient.SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'TiendaZapatos') CREATE DATABASE TiendaZapatos";
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("✓ Base de datos creada/verificada\n");
+                using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(connExpressMaster))
+                {
+                    conn.Open();
+                    System.Data.SqlClient.SqlCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'TiendaZapatos') CREATE DATABASE TiendaZapatos";
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("✓ Base de datos creada/verificada en SQLEXPRESS\n");
+                    expressOk = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️  No se pudo usar SQLEXPRESS: {ex.Message}");
+                Console.WriteLine("→ Usando LocalDB (MSSQLLocalDB) como alternativa\n");
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"⚠️  Error creando base de datos: {ex.Message}");
-        }
-        
+
         // Actualizar connection string para usar la base de datos
-        Environment.SetEnvironmentVariable("NH_CONNECTION", "Server=localhost\\SQLEXPRESS;Database=TiendaZapatos;Trusted_Connection=True;TrustServerCertificate=True;");
+        if (expressOk)
+        {
+            Environment.SetEnvironmentVariable("NH_CONNECTION", connExpress);
+        }
+        else
+        {
+            try
+            {
+                using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(connLocalDbMaster))
+                {
+                    conn.Open();
+                    System.Data.SqlClient.SqlCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = "IF DB_ID('TiendaZapatos') IS NULL CREATE DATABASE [TiendaZapatos]";
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("✓ Base de datos creada/verificada en LocalDB\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️  No se pudo crear/verificar la base en LocalDB: {ex.Message}");
+            }
+            Environment.SetEnvironmentVariable("NH_CONNECTION", connLocalDb);
+        }
         
         // Crear esquema de base de datos
         try
@@ -109,6 +144,9 @@ class Program
             prod1.TallasDisponibles.Add("42");
             productoRepo.Modify(prod1);
 
+            // Asignar fotos de muestra (deben existir en WebMVC/wwwroot/images/productos)
+            productoCEN.Modify(prod1.Id, fotos: new List<string> { "/images/productos/prod_24ebfbd406484c3d954b98dec97f0e5e.png" });
+
             Producto prod2 = productoCEN.Crear("Adidas Ultraboost", 159.99m, 12, true);
             prod2.Descripcion = "Zapatillas running con suela Boost para máxima amortiguación";
             prod2.Color = "Azul";
@@ -118,6 +156,7 @@ class Program
             prod2.TallasDisponibles.Add("42");
             prod2.TallasDisponibles.Add("43");
             productoRepo.Modify(prod2);
+            productoCEN.Modify(prod2.Id, fotos: new List<string> { "/images/productos/prod_3c00f639be9e4c7aa81b8876537d69a4.png" });
 
             Producto prod3 = productoCEN.Crear("Vans Old Skool", 65.00m, 25, false);
             prod3.Descripcion = "Zapatillas casuales clásicas con diseño atemporal";
@@ -128,6 +167,7 @@ class Program
             prod3.TallasDisponibles.Add("40");
             prod3.TallasDisponibles.Add("41");
             productoRepo.Modify(prod3);
+            productoCEN.Modify(prod3.Id, fotos: new List<string> { "/images/productos/prod_45ef84f8ea0c4b829412e2ef07aafa87.png" });
 
             Producto prod4 = productoCEN.Crear("Clarks Desert Boot", 95.50m, 18, true);
             prod4.Descripcion = "Botas desert de cuero premium, perfectas para look casual elegante";
@@ -138,6 +178,7 @@ class Program
             prod4.TallasDisponibles.Add("43");
             prod4.TallasDisponibles.Add("44");
             productoRepo.Modify(prod4);
+            productoCEN.Modify(prod4.Id, fotos: new List<string> { "/images/productos/prod_e6af14d4e74e49cda4dc3cfb21fc443b.png" });
 
             Producto prod5 = productoCEN.Crear("Converse Chuck Taylor", 55.00m, 30, false);
             prod5.Descripcion = "Zapatillas icónicas de lona, estilo urbano casual";
@@ -149,6 +190,7 @@ class Program
             prod5.TallasDisponibles.Add("40");
             prod5.TallasDisponibles.Add("41");
             productoRepo.Modify(prod5);
+            productoCEN.Modify(prod5.Id, fotos: new List<string> { "/images/productos/prod_e9eda5f46df542c68b4ae1a76f821b7e.png" });
             
             uow.SaveChanges();
             

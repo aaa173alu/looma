@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="ApplicationCore" namespace="ApplicationCore.Domain.EN">
+  <class name="Tarjeta" table="Tarjeta">
+    <id name="Id" column="Id" type="long">
+      <generator class="identity" />
+    </id>
+    <many-to-one name="Usuario" column="UsuarioId" class="Usuario" not-null="true" />
+    <property name="Marca" column="Marca" />
+    <property name="NumeroEnmascarado" column="NumeroEnmascarado" />
+    <property name="Ultimos4" column="Ultimos4" />
+    <property name="MesExp" column="MesExp" />
+    <property name="AnioExp" column="AnioExp" />
+    <property name="NombreTitular" column="NombreTitular" />
+    <property name="EsPredeterminada" column="EsPredeterminada" type="boolean" />
+    <property name="FechaAlta" column="FechaAlta" type="datetime" />
+  </class>
+</hibernate-mapping>

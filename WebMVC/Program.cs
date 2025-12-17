@@ -9,9 +9,16 @@ using NHibernate;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Usar SQL Server Express 2019
-var connectionString = "Server=localhost\\SQLEXPRESS;Database=TiendaZapatos;Trusted_Connection=True;TrustServerCertificate=True;";
-Environment.SetEnvironmentVariable("NH_CONNECTION", connectionString);
+// Configurar cadena de conexión: por defecto LocalDB; permitir SQLEXPRESS si se solicita
+var existingEnv = Environment.GetEnvironmentVariable("NH_CONNECTION");
+if (string.IsNullOrWhiteSpace(existingEnv))
+{
+    var preferExpress = string.Equals(Environment.GetEnvironmentVariable("PREFER_SQLEXPRESS"), "1", StringComparison.OrdinalIgnoreCase);
+    var defaultConn = preferExpress
+        ? "Server=localhost\\SQLEXPRESS;Database=TiendaZapatos;Trusted_Connection=True;TrustServerCertificate=True;"
+        : "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TiendaZapatos;Integrated Security=True;";
+    Environment.SetEnvironmentVariable("NH_CONNECTION", defaultConn);
+}
 
 // SessionFactory singleton
 builder.Services.AddSingleton<ISessionFactory>(_ =>
