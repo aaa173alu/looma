@@ -204,6 +204,54 @@ class Program
             Console.WriteLine("  3. REGISTRANDO USUARIOS + LOGIN");
             Console.WriteLine("═══════════════════════════════════════════════════════════════");
             
+            // 2b. CREAR MÁS ZAPATOS (hasta 30 en total)
+            Console.WriteLine("\n═══════════════════════════════════════════════════════════════");
+            Console.WriteLine("  2b. CREANDO MÁS ZAPATOS (Seeding hasta 30)");
+            Console.WriteLine("═══════════════════════════════════════════════════════════════");
+            var nombresExtra = new List<string>
+            {
+                "Puma RS-X", "New Balance 574", "Reebok Classic Leather", "Asics Gel-Kayano",
+                "Saucony Jazz", "Mizuno Wave Rider", "Nike Cortez", "Adidas Stan Smith",
+                "Timberland Classic", "Dr. Martens 1460", "Hoka One One Clifton", "Salomon Speedcross",
+                "Merrell Trail Glove", "ECCO Soft 7", "Skechers Go Walk", "Clarks Wallabee",
+                "On Cloudrunner", "Brooks Ghost", "Lacoste Graduate", "Fila Disruptor",
+                "Kappa Authentic", "Le Coq Sportif Quartz", "Karhu Fusion 2.0", "Diadora N9000",
+                "Asics GT-2000"
+            };
+            var colores = new List<string> { "Negro", "Blanco", "Azul", "Rojo", "Gris", "Verde", "Marrón", "Beige" };
+            var tallasBase = new List<string> { "39", "40", "41", "42", "43" };
+            var rnd = new Random(1234);
+
+            int creados = 0;
+            foreach (var nombre in nombresExtra)
+            {
+                // Precio aleatorio entre 45 y 180
+                decimal precio = Math.Round((decimal)(45 + rnd.NextDouble() * 135), 2);
+                // Stock aleatorio entre 10 y 50
+                int stock = rnd.Next(10, 51);
+                // Destacar ~1/3
+                bool destacado = rnd.Next(0, 3) == 0;
+
+                var p = productoCEN.Crear(nombre, precio, stock, destacado);
+                p.Descripcion = $"Modelo {nombre} ideal para uso diario";
+                p.Color = colores[rnd.Next(colores.Count)];
+                // Asignar tallas (variando 4-5 tallas)
+                p.TallasDisponibles.Clear();
+                int numTallas = rnd.Next(4, 6);
+                var tallas = tallasBase.OrderBy(_ => rnd.Next()).Take(numTallas).ToList();
+                foreach (var t in tallas) p.TallasDisponibles.Add(t);
+                productoRepo.Modify(p);
+
+                // Opcionalmente, asignar una foto placeholder
+                // Nota: usa rutas válidas si existen en tu proyecto Web
+                try { productoCEN.Modify(p.Id, fotos: new List<string> { "/images/productos/placeholder.png" }); } catch {}
+
+                creados++;
+            }
+            uow.SaveChanges();
+            Console.WriteLine($"✓ Zapatos extra creados: {creados}");
+            Console.WriteLine($"✓ Total de productos tras seeding: {productoCEN.ListarTodos().Count}");
+            
             // Crear usuario ADMIN
             Usuario admin = usuarioCEN.Registrar("Admin", "admin@test.com", "admin123");
             admin.Rol = "admin"; // Must be lowercase for role check

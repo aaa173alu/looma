@@ -9,26 +9,38 @@ using NHibernate;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Configurar cadena de conexión: por defecto LocalDB; permitir SQLEXPRESS si se solicita
-var existingEnv = Environment.GetEnvironmentVariable("NH_CONNECTION");
-if (string.IsNullOrWhiteSpace(existingEnv))
+// Configurar cadena de conexión: fuerza SQLEXPRESS si PREFER_SQLEXPRESS=1; si no, usa NH_CONNECTION si existe; en último caso LocalDB
+var preferExpress = string.Equals(Environment.GetEnvironmentVariable("PREFER_SQLEXPRESS"), "1", StringComparison.OrdinalIgnoreCase);
+var envConnExisting = Environment.GetEnvironmentVariable("NH_CONNECTION");
+var connExpress = "Server=localhost\\SQLEXPRESS;Database=TiendaZapatos;Trusted_Connection=True;TrustServerCertificate=True;";
+var connLocalDb = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TiendaZapatos;Integrated Security=True;";
+
+string finalConn = connLocalDb;
+if (preferExpress)
 {
-    var preferExpress = string.Equals(Environment.GetEnvironmentVariable("PREFER_SQLEXPRESS"), "1", StringComparison.OrdinalIgnoreCase);
-    var defaultConn = preferExpress
-        ? "Server=localhost\\SQLEXPRESS;Database=TiendaZapatos;Trusted_Connection=True;TrustServerCertificate=True;"
-        : "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TiendaZapatos;Integrated Security=True;";
-    Environment.SetEnvironmentVariable("NH_CONNECTION", defaultConn);
+    finalConn = connExpress; // fuerza SQLEXPRESS
 }
+else if (!string.IsNullOrWhiteSpace(envConnExisting))
+{
+    finalConn = envConnExisting;
+}
+Environment.SetEnvironmentVariable("NH_CONNECTION", finalConn);
 
 // SessionFactory singleton
 builder.Services.AddSingleton<ISessionFactory>(_ =>
 {
     var cfg = NHibernateHelper.BuildConfiguration();
+    // Usa siempre la connection de NH_CONNECTION que fijamos arriba
     var envConn = Environment.GetEnvironmentVariable("NH_CONNECTION");
-    if (!string.IsNullOrWhiteSpace(envConn))
-        cfg.SetProperty("connection.connection_string", envConn);
+    cfg.SetProperty("connection.connection_string", string.IsNullOrWhiteSpace(envConn) ? finalConn : envConn);
     cfg.SetProperty("show_sql", "true");
     cfg.SetProperty("format_sql", "true");
+    try
+    {
+        var activeConn = cfg.GetProperty("connection.connection_string") ?? "(none)";
+        Console.WriteLine($"NHibernate connection string: {activeConn}");
+    }
+    catch { }
     return cfg.BuildSessionFactory();
 });
 

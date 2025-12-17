@@ -1,7 +1,8 @@
 {
-  "name": "ecommerce",
-  "version": "1.0.0",
-  "generatedFrom": "diagrama2.wsd",
+  "name": "tiendaonline-zapatos",
+  "version": "2.0.0",
+  "lastUpdated": "2025-12-16",
+  "generatedFrom": "ApplicationCore.Domain.EN",
   "enums": {
     "EstadoPedido": ["carrito", "realizado", "comprado", "rechazado", "recibido", "validado"]
   },
@@ -9,32 +10,39 @@
     {
       "name": "Usuario",
       "attributes": {
-        "idUsuario": {"type": "integer"},
+        "id": {"type": "long"},
         "nombre": {"type": "string"},
         "email": {"type": "string"},
         "contrasenya": {"type": "string"},
         "telefono": {"type": "string", "nullable": true},
         "direccion": {"type": "string", "nullable": true},
-        "rol": {"type": "string", "nullable": true}
+        "rol": {"type": "string", "nullable": true},
+        "nombreEnvio": {"type": "string", "nullable": true},
+        "direccionEnvio": {"type": "string", "nullable": true},
+        "ciudadEnvio": {"type": "string", "nullable": true},
+        "cpEnvio": {"type": "string", "nullable": true},
+        "telefonoEnvio": {"type": "string", "nullable": true}
       }
     },
     {
       "name": "Producto",
       "attributes": {
-        "idProducto": {"type": "integer"},
+        "id": {"type": "long"},
         "nombre": {"type": "string"},
         "descripcion": {"type": "string", "nullable": true},
-        "precio": {"type": "number"},
+        "precio": {"type": "decimal"},
         "tallasDisponibles": {"type": "array", "items": {"type": "string"}},
         "fotos": {"type": "array", "items": {"type": "string"}, "nullable": true},
         "stock": {"type": "integer"},
-        "destacado": {"type": "boolean"}
+        "destacado": {"type": "boolean"},
+        "color": {"type": "string", "nullable": true}
       }
     },
     {
       "name": "ItemPedido",
       "attributes": {
-        "productoId": {"type": "integer"},
+        "id": {"type": "long"},
+        "productoId": {"type": "long"},
         "cantidad": {"type": "integer"},
         "talla": {"type": "string", "nullable": true}
       }
@@ -42,95 +50,114 @@
     {
       "name": "Pedido",
       "attributes": {
-        "idPedido": {"type": "integer"},
+        "id": {"type": "long"},
         "fecha": {"type": "string", "format": "date-time"},
-        "total": {"type": "number"},
+        "total": {"type": "decimal"},
         "direccionEnvio": {"type": "string"},
         "estado": {"type": "string", "enum": "EstadoPedido"},
-        "usuarioId": {"type": "integer"}
+        "usuarioId": {"type": "long"},
+        "items": {"type": "array", "items": {"type": "ItemPedido"}}
       }
     },
     {
       "name": "Ajustes",
       "attributes": {
-        "idAjustes": {"type": "integer"},
+        "id": {"type": "long"},
         "tema": {"type": "string"},
-        "notificaciones": {"type": "boolean"}
+        "notificaciones": {"type": "boolean"},
+        "usuarioId": {"type": "long"}
       }
     },
     {
       "name": "Favoritos",
       "attributes": {
-        "idFavoritos": {"type": "integer"},
+        "id": {"type": "long"},
         "fechaCreacion": {"type": "string", "format": "date-time"},
-        "usuarioId": {"type": "integer"},
-        "productoId": {"type": "integer"}
+        "usuarioId": {"type": "long"},
+        "productoId": {"type": "long"}
       }
     },
     {
       "name": "Valoracion",
       "attributes": {
-        "idValoracion": {"type": "integer"},
-        "valoracion": {"type": "integer"},
+        "id": {"type": "long"},
+        "valor": {"type": "integer"},
         "comentario": {"type": "string", "nullable": true},
-        "usuarioId": {"type": "integer"},
-        "productoId": {"type": "integer"}
+        "usuarioId": {"type": "long"},
+        "productoId": {"type": "long"}
       }
     },
     {
       "name": "Sesion",
       "attributes": {
-        "idSesion": {"type": "integer"},
+        "id": {"type": "long"},
         "fechaInicio": {"type": "string", "format": "date-time"},
         "fechaFin": {"type": "string", "format": "date-time", "nullable": true},
         "activa": {"type": "boolean"},
-        "usuarioId": {"type": "integer"}
+        "usuarioId": {"type": "long"}
       }
     },
     {
       "name": "Categoria",
       "attributes": {
-        "idCategoria": {"type": "integer"},
+        "id": {"type": "long"},
         "nombre": {"type": "string"}
       }
     },
     {
-      "name": "Pago",
+      "name": "Tarjeta",
       "attributes": {
-        "idPago": {"type": "integer"},
-        "metodoPago": {"type": "string"},
-        "fechaPago": {"type": "string", "format": "date-time"},
-        "monto": {"type": "number"},
-        "pedidoId": {"type": "integer", "nullable": true}
-      }
-    },
-    {
-      "name": "Ayuda",
-      "attributes": {
-        "idAyuda": {"type": "integer"},
-        "pregunta": {"type": "string"},
-        "respuesta": {"type": "string", "nullable": true},
-        "usuarioId": {"type": "integer"}
-      }
-    },
-    {
-      "name": "Perfil",
-      "attributes": {
-        "idPerfil": {"type": "integer"},
-        "nombre": {"type": "string"},
-        "email": {"type": "string"},
-        "contrasenya": {"type": "string"},
-        "telefono": {"type": "string", "nullable": true},
-        "usuarioId": {"type": "integer"}
+        "id": {"type": "long"},
+        "usuario": {"type": "reference", "entity": "Usuario"},
+        "marca": {"type": "string"},
+        "numeroEnmascarado": {"type": "string"},
+        "ultimos4": {"type": "string"},
+        "mesExp": {"type": "integer"},
+        "anioExp": {"type": "integer"},
+        "nombreTitular": {"type": "string"},
+        "esPredeterminada": {"type": "boolean"},
+        "fechaAlta": {"type": "string", "format": "date-time"},
+        "usuarioId": {"type": "long"}
       }
     },
     {
       "name": "Carrito",
       "attributes": {
-        "idCarrito": {"type": "integer"},
-        "total": {"type": "number"},
+        "id": {"type": "long"},
+        "total": {"type": "decimal"},
         "fechaCreacion": {"type": "string", "format": "date-time"},
-        "usuarioId": {"type": "integer"}
+        "usuarioId": {"type": "long"},
+        "items": {"type": "array", "items": {"type": "ItemPedido"}}
+      }
+    },
+    {
+      "name": "Perfil",
+      "attributes": {
+        "id": {"type": "long"},
+        "nombre": {"type": "string"},
+        "email": {"type": "string"},
+        "contrasenya": {"type": "string"},
+        "telefono": {"type": "string", "nullable": true},
+        "usuarioId": {"type": "long"}
+      }
+    },
+    {
+      "name": "Pago",
+      "attributes": {
+        "id": {"type": "long"},
+        "metodoPago": {"type": "string"},
+        "fechaPago": {"type": "string", "format": "date-time"},
+        "monto": {"type": "decimal"},
+        "pedidoId": {"type": "long", "nullable": true}
+      }
+    },
+    {
+      "name": "Ayuda",
+      "attributes": {
+        "id": {"type": "long"},
+        "pregunta": {"type": "string"},
+        "respuesta": {"type": "string", "nullable": true},
+        "usuarioId": {"type": "long"}
       }
     }
   ],
