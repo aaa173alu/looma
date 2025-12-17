@@ -100,6 +100,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Rewrite legacy placeholder.png to existing placeholder.svg
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value;
+    if (!string.IsNullOrEmpty(path) && string.Equals(path, "/images/productos/placeholder.png", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Request.Path = "/images/productos/placeholder.svg";
+    }
+    await next();
+});
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();

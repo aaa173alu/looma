@@ -134,6 +134,22 @@ class Program
             Console.WriteLine("\n═══════════════════════════════════════════════════════════════");
             Console.WriteLine("  2. CREANDO ZAPATOS");
             Console.WriteLine("═══════════════════════════════════════════════════════════════");
+            // Descubrir imágenes disponibles en el proyecto Web para asignar fotos únicas
+            List<string> imageUrls = new List<string>();
+            try
+            {
+                var baseDir = AppContext.BaseDirectory;
+                var imagesDir = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "..", "WebMVC", "wwwroot", "images", "productos"));
+                if (Directory.Exists(imagesDir))
+                {
+                    var files = Directory.GetFiles(imagesDir, "prod_*.png", SearchOption.TopDirectoryOnly);
+                    foreach (var f in files)
+                    {
+                        imageUrls.Add($"/images/productos/{Path.GetFileName(f)}");
+                    }
+                }
+            }
+            catch { }
             Producto prod1 = productoCEN.Crear("Nike Air Max 2024", 129.99m, 15, true);
             prod1.Descripcion = "Zapatillas deportivas de última generación con tecnología Air";
             prod1.Color = "Negro/Blanco";
@@ -145,7 +161,18 @@ class Program
             productoRepo.Modify(prod1);
 
             // Asignar fotos de muestra (deben existir en WebMVC/wwwroot/images/productos)
-            productoCEN.Modify(prod1.Id, fotos: new List<string> { "/images/productos/prod_24ebfbd406484c3d954b98dec97f0e5e.png" });
+            var imgIdx = 0;
+            string TakeImageOrPlaceholder()
+            {
+                if (imageUrls.Count > 0)
+                {
+                    var url = imageUrls[imgIdx % imageUrls.Count];
+                    imgIdx++;
+                    return url;
+                }
+                return "/images/productos/placeholder.svg";
+            }
+            productoCEN.Modify(prod1.Id, fotos: new List<string> { TakeImageOrPlaceholder() });
 
             Producto prod2 = productoCEN.Crear("Adidas Ultraboost", 159.99m, 12, true);
             prod2.Descripcion = "Zapatillas running con suela Boost para máxima amortiguación";
@@ -156,7 +183,7 @@ class Program
             prod2.TallasDisponibles.Add("42");
             prod2.TallasDisponibles.Add("43");
             productoRepo.Modify(prod2);
-            productoCEN.Modify(prod2.Id, fotos: new List<string> { "/images/productos/prod_3c00f639be9e4c7aa81b8876537d69a4.png" });
+            productoCEN.Modify(prod2.Id, fotos: new List<string> { TakeImageOrPlaceholder() });
 
             Producto prod3 = productoCEN.Crear("Vans Old Skool", 65.00m, 25, false);
             prod3.Descripcion = "Zapatillas casuales clásicas con diseño atemporal";
@@ -167,7 +194,7 @@ class Program
             prod3.TallasDisponibles.Add("40");
             prod3.TallasDisponibles.Add("41");
             productoRepo.Modify(prod3);
-            productoCEN.Modify(prod3.Id, fotos: new List<string> { "/images/productos/prod_45ef84f8ea0c4b829412e2ef07aafa87.png" });
+            productoCEN.Modify(prod3.Id, fotos: new List<string> { TakeImageOrPlaceholder() });
 
             Producto prod4 = productoCEN.Crear("Clarks Desert Boot", 95.50m, 18, true);
             prod4.Descripcion = "Botas desert de cuero premium, perfectas para look casual elegante";
@@ -178,7 +205,7 @@ class Program
             prod4.TallasDisponibles.Add("43");
             prod4.TallasDisponibles.Add("44");
             productoRepo.Modify(prod4);
-            productoCEN.Modify(prod4.Id, fotos: new List<string> { "/images/productos/prod_e6af14d4e74e49cda4dc3cfb21fc443b.png" });
+            productoCEN.Modify(prod4.Id, fotos: new List<string> { TakeImageOrPlaceholder() });
 
             Producto prod5 = productoCEN.Crear("Converse Chuck Taylor", 55.00m, 30, false);
             prod5.Descripcion = "Zapatillas icónicas de lona, estilo urbano casual";
@@ -190,7 +217,7 @@ class Program
             prod5.TallasDisponibles.Add("40");
             prod5.TallasDisponibles.Add("41");
             productoRepo.Modify(prod5);
-            productoCEN.Modify(prod5.Id, fotos: new List<string> { "/images/productos/prod_e9eda5f46df542c68b4ae1a76f821b7e.png" });
+            productoCEN.Modify(prod5.Id, fotos: new List<string> { TakeImageOrPlaceholder() });
             
             uow.SaveChanges();
             
@@ -242,9 +269,8 @@ class Program
                 foreach (var t in tallas) p.TallasDisponibles.Add(t);
                 productoRepo.Modify(p);
 
-                // Opcionalmente, asignar una foto placeholder
-                // Nota: usa rutas válidas si existen en tu proyecto Web
-                try { productoCEN.Modify(p.Id, fotos: new List<string> { "/images/productos/placeholder.png" }); } catch {}
+                // Asignar una foto única si hay imágenes disponibles; si no, usar placeholder
+                try { productoCEN.Modify(p.Id, fotos: new List<string> { TakeImageOrPlaceholder() }); } catch {}
 
                 creados++;
             }

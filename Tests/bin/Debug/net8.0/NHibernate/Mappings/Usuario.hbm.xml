@@ -10,5 +10,10 @@
     <property name="Telefono" column="Telefono" />
     <property name="Direccion" column="Direccion" />
     <property name="Rol" column="Rol" />
+    <property name="NombreEnvio" column="NombreEnvio" />
+    <property name="DireccionEnvio" column="DireccionEnvio" />
+    <property name="CiudadEnvio" column="CiudadEnvio" />
+    <property name="CPEnvio" column="CPEnvio" />
+    <property name="TelefonoEnvio" column="TelefonoEnvio" />
   </class>
 </hibernate-mapping>
